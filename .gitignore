@@ -16,3 +16,5 @@ ref-stickers.txt
 
 # Local verification screenshots
 *.png
+!assets/**/*.png
+!**/img/**/*.png
