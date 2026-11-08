@@ -690,6 +690,8 @@ button:focus-visible {
 .manifesto-portrait {
     grid-column: 1 / span 3;
     padding: 8px;
+    position: relative;
+    left: 3.2vw;
 }
 
 .manifesto-portrait-frame {
@@ -1252,6 +1254,7 @@ button:focus-visible {
 
     .manifesto-portrait {
         grid-column: 1 / span 4;
+        left: 0;
     }
 
     .manifesto-copy {
@@ -1515,6 +1518,10 @@ button:focus-visible {
     .manifesto-portrait,
     .manifesto-copy {
         grid-column: 1 / -1;
+    }
+
+    .manifesto-portrait {
+        left: 0;
     }
 
     .manifesto-copy {

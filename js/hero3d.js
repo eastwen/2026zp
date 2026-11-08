@@ -35,7 +35,7 @@ const CONFIG = {
     yRatio: -0.24,
   },
   post: {
-    resolutionScale: 0.75,
+    resolutionScale: 1,
     smoothing: 0.1,
     leaveSmoothing: 0.05,
     sine: { mixRadius: 0.1, frequency: 0.42, amplitude: 0.32, rotation: 0 },
@@ -70,6 +70,8 @@ const state = {
   cursorCounterTilt: null,
   cursorSpinAngle: 0,
   floatingStickers: [],
+  stickersStarted: false,
+  stickersStartAt: 0,
   sceneTarget: null,
   dotOverlay: null,
   dotOverlayMaterial: null,
@@ -87,6 +89,8 @@ const state = {
   cursorLightNdc: new THREE.Vector2(),
   scrollY: 0,
   scrollWrapper: null,
+  heroSection: null,
+  spaceSection: null,
   postScene: null,
   postCamera: null,
   postMaterial: null,
@@ -478,13 +482,10 @@ function setupScene() {
     uniforms: {
       uColor: { value: new THREE.Color(0x0f0e0b) },
       uOpacity: { value: 0 },
-      uPixelSize: { value: 8 },
+      uPixelSize: { value: 5 },
       uRadiusScale: { value: 0.9 },
       uResolution: {
-        value: new THREE.Vector2(
-          Math.max(1, state.canvas.clientWidth),
-          Math.max(1, state.canvas.clientHeight)
-        ),
+        value: new THREE.Vector2(1, 1),
       },
     },
     transparent: true,
@@ -499,7 +500,6 @@ function setupScene() {
   state.dotOverlay.frustumCulled = false;
   state.dotOverlay.renderOrder = 10;
   state.dotOverlay.visible = false;
-  state.scene.add(state.dotOverlay);
 }
 
 function isMobileViewport() {
@@ -544,6 +544,10 @@ function setupPost() {
     stencilBuffer: false,
   });
   state.dotInputTarget = state.postTarget.clone();
+  state.dotOverlayMaterial.uniforms.uResolution.value.set(
+    state.canvas.clientWidth,
+    state.canvas.clientHeight
+  );
   state.flareTarget = new THREE.WebGLRenderTarget(width, height, {
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
@@ -618,7 +622,11 @@ function setupPost() {
     depthWrite: false,
     toneMapped: false,
   });
-  state.finalScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), state.finalMaterial));
+  const finalQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), state.finalMaterial);
+  finalQuad.renderOrder = 0;
+  state.finalScene.add(finalQuad);
+
+  state.finalScene.add(state.dotOverlay);
 }
 
 function createGlassMaterial(localYRange) {
@@ -691,14 +699,28 @@ function fitCursor() {
   );
 }
 
+function stickerViewportAtZ(z) {
+  const distance = Math.max(0.1, state.camera.position.z - z);
+  const height =
+    (2 * Math.tan(THREE.MathUtils.degToRad(state.camera.fov / 2)) * distance) /
+    Math.max(state.camera.zoom, 0.001);
+  return {
+    height,
+    width: height * state.camera.aspect,
+  };
+}
+
+function createLaneRatio(lane, laneCount) {
+  const center = (lane + 0.5) / Math.max(laneCount, 1) - 0.5;
+  return center + THREE.MathUtils.randFloatSpread(0.8 / Math.max(laneCount, 1));
+}
+
 function loadStickers() {
   const loader = new THREE.TextureLoader();
   const isMobile = isMobileViewport();
-  const particleCount = isMobile ? 12 : 18;
+  const particleCount = isMobile ? 9 : 14;
   for (let index = 0; index < particleCount; index += 1) {
     const file = stickerFiles[index % stickerFiles.length];
-    const worldHeight = viewportHeight();
-    const worldWidth = worldHeight * state.camera.aspect;
     loader.load(
       `./assets/reference/stickers/${file}`,
       (texture) => {
@@ -714,24 +736,30 @@ function loadStickers() {
         const worldHeight = viewportHeight();
         const sizeFactor = 0.72 + Math.random() * 0.62;
         const size = (isMobile ? worldHeight * 0.075 : 2.4) * sizeFactor;
-        const spawnWidthRatio = isMobile ? 1.5 : 0.92;
-        const spawnWidth = worldWidth * spawnWidthRatio;
-        const spawnRange = isMobile ? worldHeight * 1.2 : worldHeight * 0.52;
-        const spawnY = THREE.MathUtils.randFloatSpread(spawnRange * 2);
+        const spawnWidthRatio = isMobile ? 1.12 : 1;
+        const depth = THREE.MathUtils.randFloat(-8, -3.5);
+        const viewport = stickerViewportAtZ(depth);
+        const spawnWidth = viewport.width * spawnWidthRatio;
+        const baseXLane = createLaneRatio(index, particleCount);
+        const baseX = baseXLane * spawnWidth;
+        const spawnY =
+          viewport.height * 0.5 +
+          0.6 +
+          Math.random() * viewport.height * 0.72;
         mesh.scale.set(size * aspect, size, 1);
-        mesh.position.set(
-          THREE.MathUtils.randFloatSpread(spawnWidth),
-          spawnY,
-          THREE.MathUtils.randFloat(-9, -4)
-        );
+        mesh.position.set(baseX, spawnY, depth);
         mesh.rotation.z = THREE.MathUtils.randFloatSpread(Math.PI);
+        material.opacity = 0;
 
         const speed =
           (isMobile ? worldHeight * 0.07 : 1) *
           THREE.MathUtils.randFloat(1.1, 2.5);
         state.floatingStickers.push({
           mesh,
-          baseX: mesh.position.x,
+          baseX,
+          baseXLane,
+          lane: index,
+          laneCount: particleCount,
           spawnWidth,
           spawnWidthRatio,
           spawnHeight: worldHeight,
@@ -743,6 +771,7 @@ function loadStickers() {
           aspect,
           sizeScreenRatio: size / worldHeight,
         });
+        mesh.visible = state.stickersStarted && !hasSpaceReachedViewport();
         state.scene.add(mesh);
       },
       undefined,
@@ -754,14 +783,13 @@ function loadStickers() {
 function layoutFloatingStickers() {
   if (!state.floatingStickers.length) return;
   const worldHeight = viewportHeight();
-  const worldWidth = worldHeight * state.camera.aspect;
 
   state.floatingStickers.forEach((item) => {
     const size = worldHeight * item.sizeScreenRatio;
-    const previousSpawnWidth = item.spawnWidth || worldWidth;
+    const viewport = stickerViewportAtZ(item.mesh.position.z);
     item.mesh.scale.set(size * item.aspect, size, 1);
-    item.baseX *= worldWidth / Math.max(previousSpawnWidth, 0.001);
-    item.spawnWidth = worldWidth * (item.spawnWidthRatio || 0.92);
+    item.spawnWidth = viewport.width * (item.spawnWidthRatio || 1);
+    item.baseX = item.baseXLane * item.spawnWidth;
     item.spawnHeight = worldHeight;
     item.speed = worldHeight * item.speedScreenRatio;
   });
@@ -797,6 +825,7 @@ function loadHello() {
       THREE.MathUtils.degToRad(CONFIG.hello.rotation[1]),
       THREE.MathUtils.degToRad(CONFIG.hello.rotation[2])
     );
+    state.hello.visible = !hasHeroLeftViewport();
     state.scene.add(state.hello);
   }, undefined, () => {});
 }
@@ -840,6 +869,7 @@ function loadCursor() {
     state.cursorSpin.add(state.cursorCounterTilt);
     state.cursorTilt.add(state.cursorSpin);
     state.cursor.add(state.cursorTilt);
+    state.cursor.visible = !hasHeroLeftViewport();
     state.scene.add(state.cursor);
     fitCursor();
   }, undefined, () => {});
@@ -870,6 +900,8 @@ function bindEvents() {
     pointer.hover = 0;
   }, { passive: true });
   window.addEventListener('resize', resize, { passive: true });
+  state.heroSection = document.querySelector('.hero');
+  state.spaceSection = document.querySelector('[data-space]');
   state.scrollWrapper = document.querySelector('[data-scroll-wrapper]') || window;
   state.scrollWrapper.addEventListener('scroll', () => {
     state.scrollY = state.scrollWrapper.scrollTop || window.scrollY || 0;
@@ -912,10 +944,24 @@ function resize() {
 }
 
 function updateStickers(elapsed, delta) {
-  const viewportHeight = 2 * Math.tan(THREE.MathUtils.degToRad(state.camera.fov / 2)) * state.camera.position.z;
-  const verticalRange = viewportHeight * (isMobileViewport() ? 1.2 : 0.72);
-  const lowerBound = -verticalRange;
-  const upperBound = verticalRange;
+  if (!state.stickersStarted) {
+    if (document.getElementById('boot')) {
+      state.floatingStickers.forEach((item) => {
+        item.mesh.material.opacity = 0;
+      });
+      return;
+    }
+    state.stickersStarted = true;
+    state.stickersStartAt = elapsed + 0.35;
+  }
+
+  if (elapsed < state.stickersStartAt) {
+    state.floatingStickers.forEach((item) => {
+      item.mesh.material.opacity = 0;
+    });
+    return;
+  }
+
   const scrollProgress = THREE.MathUtils.clamp(
     (state.scrollWrapper?.scrollTop || window.scrollY || 0) / Math.max(window.innerHeight, 1),
     0,
@@ -924,17 +970,27 @@ function updateStickers(elapsed, delta) {
   const scrollFade = 1 - 0.45 * scrollProgress;
 
   state.floatingStickers.forEach((item) => {
+    const viewport = stickerViewportAtZ(item.mesh.position.z);
+    const halfHeight = viewport.height * 0.5;
+    const centerY = state.camera.position.y;
+    const lowerBound = centerY - halfHeight;
+    const upperBound = centerY + halfHeight;
+
     item.mesh.position.y -= item.speed * delta;
     item.mesh.position.x = item.baseX + Math.sin(elapsed * item.sway + item.swayPhase) * item.sway;
     item.mesh.rotation.z += item.spin * delta;
 
     const normalizedY = THREE.MathUtils.clamp((item.mesh.position.y - lowerBound) / (upperBound - lowerBound), 0, 1);
-    const edgeFade = THREE.MathUtils.smoothstep(normalizedY, 0, 0.14) * (1 - THREE.MathUtils.smoothstep(normalizedY, 0.86, 1));
+    const edgeFade = THREE.MathUtils.smoothstep(normalizedY, 0, 0.16) * (1 - THREE.MathUtils.smoothstep(normalizedY, 0.76, 1));
     item.mesh.material.opacity = edgeFade * scrollFade;
 
     if (item.mesh.position.y < lowerBound - 1) {
-      item.mesh.position.y = upperBound + 1;
-      item.baseX = THREE.MathUtils.randFloatSpread(item.spawnWidth || 28);
+      item.mesh.position.y =
+        upperBound + 1 + Math.random() * (upperBound - lowerBound) * 0.9;
+      item.baseXLane = createLaneRatio(item.lane, item.laneCount);
+      item.baseX = item.baseXLane * item.spawnWidth;
+      item.swayPhase = Math.random() * Math.PI * 2;
+      item.mesh.rotation.z = THREE.MathUtils.randFloatSpread(Math.PI);
     }
   });
 }
@@ -988,6 +1044,16 @@ function updateScene(elapsed, delta) {
       heroMotionProgress * height * 1.35;
     state.cursor.position.z = compact ? CONFIG.cursor.compactPosition[2] : 3.5;
   }
+}
+
+function hasHeroLeftViewport() {
+  if (!state.heroSection) return false;
+  return state.heroSection.getBoundingClientRect().bottom <= 0;
+}
+
+function hasSpaceReachedViewport() {
+  if (!state.spaceSection) return false;
+  return state.spaceSection.getBoundingClientRect().top <= 0;
 }
 
 function updateCameraAndLight(delta) {
@@ -1098,6 +1164,18 @@ function render() {
   updateCameraAndLight(delta);
   updateCursorLight(delta);
 
+  const heroLeftViewport = hasHeroLeftViewport();
+  const spaceReachedViewport = hasSpaceReachedViewport();
+  const stickersActive =
+    state.stickersStarted &&
+    elapsed >= state.stickersStartAt &&
+    !spaceReachedViewport;
+  if (state.hello) state.hello.visible = !heroLeftViewport;
+  if (state.cursor) state.cursor.visible = !heroLeftViewport;
+  state.floatingStickers.forEach((item) => {
+    item.mesh.visible = stickersActive;
+  });
+
   const currentScrollY = state.scrollWrapper?.scrollTop || window.scrollY || 0;
   const dotProgress = THREE.MathUtils.clamp(
     currentScrollY / Math.max(window.innerHeight * 0.85, 1),
@@ -1109,28 +1187,26 @@ function render() {
       THREE.MathUtils.smoothstep(dotProgress, 0, 1) * 0.46;
   }
   if (state.dotOverlay) {
-    state.dotOverlay.visible = dotProgress > 0.0001;
+    state.dotOverlay.visible = dotProgress > 0.0001 && !spaceReachedViewport;
   }
   if (state.glassMaterial) {
     state.glassMaterial.uniforms.uTexture.value = state.refractionTarget.texture;
   }
 
+  const helloWasVisible = Boolean(state.hello?.visible);
   if (state.hello) state.hello.visible = false;
   state.floatingStickers.forEach((item) => {
     item.wasVisibleForRefraction = item.mesh.visible;
     item.mesh.visible = false;
   });
-  const dotOverlayVisible = Boolean(state.dotOverlay?.visible);
-  if (state.dotOverlay) state.dotOverlay.visible = false;
   state.renderer.setRenderTarget(state.refractionTarget);
   state.renderer.clear();
   state.renderer.render(state.scene, state.camera);
 
-  if (state.hello) state.hello.visible = true;
+  if (state.hello) state.hello.visible = helloWasVisible;
   state.floatingStickers.forEach((item) => {
     item.mesh.visible = item.wasVisibleForRefraction !== false;
   });
-  if (state.dotOverlay) state.dotOverlay.visible = dotOverlayVisible;
   state.renderer.setRenderTarget(state.sceneTarget);
   state.renderer.clear();
   state.renderer.render(state.scene, state.camera);
