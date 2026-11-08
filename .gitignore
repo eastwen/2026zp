@@ -1,0 +1,18 @@
+# Local browser profiles and debug helpers
+.chrome-cdp/
+.chrome-mobile/
+tmp-*.mjs
+update-version.ps1
+deform-test.html
+js/deform-test.js
+js/hero3d.js.broken.bak
+dump2.mjs
+dump_out.txt
+ref-grid.txt
+ref-stickers.txt
+
+# Reference site source captured for research only
+新建文件夹/
+
+# Local verification screenshots
+*.png

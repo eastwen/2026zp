@@ -1,291 +1,203 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>East  wen - 设计师作品集</title>
-    <link rel="stylesheet" href="style.css?v=1.7">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="js/header-component.js"></script>
-    <script src="js/footer-component.js"></script>
-<!-- Trigger rebuild -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>East wen | 设计师作品集</title>
+    <meta name="description" content="温晓东，UI 设计师，10 年界面与动效设计经验。">
+    <meta name="theme-color" content="#030302">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f0e0b'/%3E%3Crect x='5' y='6' width='3' height='20' fill='%23f5a000'/%3E%3Ctext x='11' y='23' font-family='monospace' font-size='17' fill='%23fff7dc'%3EE%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="css/home.css?v=55">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "./vendor/three/three.module.js",
+                "three/addons/": "./vendor/three/addons/"
+            }
+        }
+    </script>
 </head>
 <body>
-    <!-- Header将通过组件动态插入 -->
-
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1>初次见面，我的名字叫温晓东</h1>
-                <p class="hero-subtitle">是一个热爱交互的 UI 设计师</p>
-                <a href="#portfolio" class="btn-primary">查看所有作品</a>
-            </div>
-            <div class="hero-avatar">
-                <div class="avatar-circle">
-                    <span class="avatar-text">eemaovision</span>
-                </div>
-            </div>
+    <div class="grid-overlay" data-grid-overlay aria-hidden="true"></div>
+    <div id="boot" role="status" aria-live="polite">
+        <div class="boot-box">
+            <div class="boot-meta"><span class="boot-brand">East wen</span><span data-boot-pct>00%</span></div>
+            <div class="boot-track"><div class="boot-bar" data-boot-bar></div></div>
+            <div class="boot-status"><span>LOADING PORTFOLIO</span><span>UI / MOTION / AIGC</span></div>
         </div>
-    </section>
+    </div>
 
-    <section id="about" class="about animate-on-scroll">
-        <h2>我的介绍</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>拥有10年丰富的UI设计经验，涉及Web、移动端、大屏设计、终端设备界面等多个领域，擅长打造直观、高效且富有吸引力的用户体验。具备扎实的设计功底和创新思维，能够灵活应对不同产品需求，提供兼具美感与实用性的设计方案。精通三维设计与视频剪辑，善于将动态视觉表现融入UI设计，提升产品的视觉冲击力与互动体验。深耕AIGC领域，探索智能生成技术在UI设计中的应用，提高设计效率与创造力。擅长跨团队协作，与开发和产品团队高效配合，确保设计从概念到落地的顺畅执行。致力于通过设计赋能产品，提升用户体验和市场竞争力。</p>
+    <header class="site-head" aria-label="站点导航">
+        <div class="head-top">
+            <a class="wordmark" href="#top" aria-label="回到顶部"><span>East wen</span><span>BLOG</span></a>
+            <div class="head-links" id="site-menu">
+                <a href="#work">作品</a>
+                <a href="#contact">联系</a>
+                <button type="button" data-theme-toggle aria-label="切换主题">主题[D]</button>
+                <button type="button" data-sound-toggle aria-pressed="false" aria-label="播放声音">声音[I]</button>
             </div>
-            <div class="skills-section">
-                <div class="skills-tags">
-                    <span class="skill-tag">UI/UX 设计</span>
-                    <span class="skill-tag">交互设计</span>
-                    <span class="skill-tag">视觉设计</span>
-                    <span class="skill-tag">原型设计</span>
-                    <span class="skill-tag">品牌设计</span>
-                    <span class="skill-tag">动效设计</span>
-                    <span class="skill-tag">用户研究</span>
-                    <span class="skill-tag">设计系统</span>
-                </div>
-            </div>
+            <button class="head-menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="打开菜单">
+                <span></span>
+                <span></span>
+            </button>
         </div>
-    </section>
-
-    <section id="portfolio" class="portfolio animate-on-scroll">
-        <div class="portfolio-header">
-            <h2>精选作品</h2>
-            <p class="portfolio-subtitle">探索我的设计之旅，每个项目都承载着独特的故事</p>
+        <div class="head-bottom">
+            <span class="head-time" data-clock>中国时间 --:--</span>
+            <span class="head-sum" aria-hidden="true">UI / MOTION</span>
+            <span class="head-coords" aria-hidden="true"><span data-pointer-x>0000</span> X <span data-pointer-y>0000</span> Y</span>
         </div>
-        <div class="portfolio-grid">
-            <a href="2026/2026-gallery.html" class="portfolio-item featured portfolio-link">
-                <div class="project-image">
-                    <img src="2026/01.png" alt="2026作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">2026作品集</div>
-                    <h3>2026年度设计作品</h3>
-                    <p class="project-description">2026年最新设计作品集合，包含多种风格的创意设计</p>
-                </div>
-            </a>
-            <a href="gif/gif-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="gif/013n0diowpjwhw0pxoim3v3236.gif" alt="GIF动画作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">动效</div>
-                    <h3>动效设计</h3>
-                    <p class="project-description">精选动效作品，展现动态设计的创意与魅力</p>
-                </div>
-            </a>
-            <a href="gnsj/gnsj-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="gnsj/Frame 2.jpg" alt="功能设计作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">社交产品</div>
-                    <h3>Mobile App</h3>
-                    <p class="project-description">专注于用户体验的设计，提升社交产品属性</p>
-                </div>
-            </a>
-            <a href="hwsj/hwsj-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="hwsj/Frame 2.jpg" alt="海外设计作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">海外设计</div>
-                    <h3>海外设计作品集</h3>
-                    <p class="project-description">面向国际市场的设计作品，融合多元文化与现代美学</p>
-                </div>
-            </a>
-            <a href="dp/dp-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="dp/未命名项目-图层 1.jpeg" alt="大屏设计作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">大屏设计</div>
-                    <h3>大屏设计作品集</h3>
-                    <p class="project-description">数据可视化大屏设计，专业的信息展示与交互体验</p>
-                </div>
-            </a>
-            <a href="ztlogo/ztlogo-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="ztlogo/方案1.jpg" alt="主题LOGO作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">LOGO</div>
-                    <h3>LOGO设计集</h3>
-                    <p class="project-description">专业的标志设计作品，展现品牌视觉识别的创意与美学</p>
-                </div>
-            </a>
-            <a href="logo/logo-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="logo/10077.webp" alt="LOGO设计作品集封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">LOGO</div>
-                    <h3>LOGO设计作品集</h3>
-                    <p class="project-description">专业的标志设计作品，展现品牌视觉识别的创意与美学</p>
-                </div>
-            </a>
-            <a href="AIGC/aigc-gallery.html" class="portfolio-item portfolio-link">
-                <div class="project-image">
-                    <img src="AIGC/微信图片_20260702100457.png" alt="AIGC作品封面" loading="lazy">
-                </div>
-                <div class="project-info">
-                    <div class="project-category">AIGC</div>
-                    <h3>AI生成内容展示</h3>
-                    <p class="project-description">AIGC设计作品集合</p>
-                </div>
-            </a> 
-         </div>
-    </section>
+    </header>
 
-    <!-- Footer将通过组件动态插入 -->
+    <div class="page-scroll" data-scroll-wrapper>
+        <div class="page-content" data-scroll-content>
+            <section class="hero" id="top" aria-labelledby="hero-title">
+                <div class="hero-stage" aria-hidden="true">
+                    <div class="hero-canvas" data-hero-canvas></div>
+                </div>
+                <div class="hero-sticker-canvas" data-sticker-canvas aria-hidden="true"></div>
+                <div class="hero-copy">
+                    <h1 class="hero-title" id="hero-title">
+                        <span>在像素荒原上</span>
+                        <span>用秩序与偏执</span>
+                        <span>锻造有温度的数字界面</span>
+                    </h1>
+                </div>
+            </section>
 
-    <script>
-        // 初始化Header和Footer组件
-        document.addEventListener('DOMContentLoaded', function() {
-            // 创建Header组件（主页）
-            HeaderComponent.create({ isSubPage: false });
-
-            // 创建Footer组件
-            FooterComponent.create();
-
-            // 初始化页面其他功能
-            setTimeout(() => {
-                initMainPageFeatures();
-            }, 100);
-        });
-
-        // 主页特有功能初始化 - 性能优化版本
-        function initMainPageFeatures() {
-            // 优化的滚动触发动画 - 提前触发
-            const observerOptions = {
-                threshold: 0.05,
-                rootMargin: '0px 0px 100px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                        // 动画完成后停止观察，提升性能
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            // 观察所有需要动画的元素
-            document.querySelectorAll('.animate-on-scroll').forEach(el => {
-                observer.observe(el);
-            });
-
-            // 为 portfolio-item 添加优化的交错动画
-            const portfolioItems = document.querySelectorAll('.portfolio-item');
-            portfolioItems.forEach((item, index) => {
-                // 进一步减少延迟时间，快速响应
-                item.style.transitionDelay = `${index * 50}ms`;
-                observer.observe(item);
-            });
-
-            console.log('Main page features initialized with performance optimizations.');
-        }
-
-        // 图片保护措施 - 禁用右键菜单和拖拽
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // 禁用图片选择和复制
-        document.addEventListener('selectstart', function(e) {
-            if (e.target.tagName === 'IMG') {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // 禁用键盘快捷键保存
-        document.addEventListener('keydown', function(e) {
-            // 禁用 Ctrl+S (保存)
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                return false;
-            }
-            // 禁用 F12 (开发者工具)
-            if (e.key === 'F12') {
-                e.preventDefault();
-                return false;
-            }
-            // 禁用 Ctrl+Shift+I (开发者工具)
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // 技术防护 - 开发者工具检测
-        let devtools = {
-            open: false,
-            orientation: null
-        };
-
-        const threshold = 160;
-
-        setInterval(function() {
-            if (window.outerHeight - window.innerHeight > threshold ||
-                window.outerWidth - window.innerWidth > threshold) {
-                if (!devtools.open) {
-                    devtools.open = true;
-                    // 温和提示而不是强制关闭页面
-                    const warning = document.createElement('div');
-                    warning.id = 'dev-warning';
-                    warning.innerHTML = `
-                        <div style="
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            background: rgba(0,0,0,0.9);
-                            color: white;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            z-index: 99999;
-                            font-size: 24px;
-                            text-align: center;
-                        ">
-                            <div>
-                                <h2>⚠️ 检测到开发者工具</h2>
-                                <p>为保护作品版权，请关闭开发者工具</p>
-                                <p style="font-size: 16px; margin-top: 20px;">
-                                    <button onclick="document.getElementById('dev-warning').remove()"
-                                            style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
-                                        我已关闭
-                                    </button>
-                                </p>
-                            </div>
+            <section class="manifesto" id="manifesto" aria-label="个人简介">
+                <div class="grid-12 manifesto-grid">
+                    <figure class="manifesto-portrait" aria-label="个人照片占位">
+                        <div class="manifesto-portrait-frame">
+                            <span class="manifesto-portrait-mark" aria-hidden="true">PORTRAIT</span>
                         </div>
-                    `;
-                    document.body.appendChild(warning);
-                }
-            } else {
-                devtools.open = false;
-                const warning = document.getElementById('dev-warning');
-                if (warning) {
-                    warning.remove();
-                }
-            }
-        }, 500);
-    </script>
+                    </figure>
+                    <div class="manifesto-copy">
+                        <p>05 年开始接触设计，做过网页、移动端、大屏与终端界面。当过讲师，做过广告工作室，13 年毕业后一直在产品里打磨界面。</p>
+                        <p class="is-muted">如今依然相信：好的界面不喧哗，却让人愿意多用一次。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space" data-space>
+                <div class="space-sticky">
+                    <div class="sticker-field" aria-hidden="true">
+                        <img class="sticker sticker-one" src="assets/reference/stickers/s_01.png" alt="">
+                        <img class="sticker sticker-two" src="assets/reference/stickers/s_02.png" alt="">
+                        <img class="sticker sticker-three" src="assets/reference/stickers/s_03.png" alt="">
+                        <img class="sticker sticker-four" src="assets/reference/stickers/s_04.png" alt="">
+                        <img class="sticker sticker-five" src="assets/reference/stickers/s_05.png" alt="">
+                        <img class="sticker sticker-six" src="assets/reference/stickers/s_09.png" alt="">
+                        <img class="sticker sticker-seven" src="assets/reference/stickers/s_11.png" alt="">
+                        <img class="sticker sticker-eight" src="assets/reference/stickers/s_12.png" alt="">
+                    </div>
+                    <div class="star-field" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                    <p class="space-title" data-space-title>
+                        <span data-line>让信息有秩序</span>
+                        <span data-line class="is-muted">让交互有温度</span>
+                        <span data-line>让复杂变简单</span>
+                    </p>
+                    <div class="space-caption" aria-hidden="true">
+                        <span data-space-stage>01</span>
+                        <span>SCROLL TO EXPLORE</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about" id="about">
+                <div class="grid-12 about-grid">
+                    <div class="about-mark" aria-hidden="true"><img src="AIGC/微信图片_20250702100457.png" alt=""></div>
+                    <div class="about-copy">
+                        <p class="stagger" data-reveal>拥有 10 年丰富的 UI 设计经验，涉及 Web、移动端、大屏设计、终端设备界面等多个领域，擅长打造直观、高效且富有吸引力的用户体验。</p>
+                        <p class="stagger is-muted" data-reveal>精通三维设计与视频剪辑，善于将动态视觉表现融入 UI 设计，提升产品的视觉冲击力与互动体验。深耕 AIGC 领域，探索智能生成技术在 UI 设计中的应用，提高设计效率与创造力。</p>
+                        <p class="stagger" data-reveal>擅长跨团队协作，与开发和产品团队高效配合，确保设计从概念到落地的顺畅执行。</p>
+                    </div>
+                    <ul class="skill-list" aria-label="能力">
+                        <li>UI / UX 设计</li>
+                        <li>交互设计</li>
+                        <li>视觉设计</li>
+                        <li>原型设计</li>
+                        <li>品牌设计</li>
+                        <li>动效设计</li>
+                        <li>用户研究</li>
+                        <li>设计系统</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="work" id="work" aria-labelledby="work-title">
+                <div class="grid-12 work-head">
+                    <h2 class="work-title" id="work-title">SELECTED<br>WORKS</h2>
+                    <p class="work-intro">八组作品，按年份与方向排列。悬停查看动效预览，点击进入完整项目。</p>
+                </div>
+                <div class="grid-12 work-grid">
+                    <a class="work-card" href="2026/2026-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="2026/01.png" alt=""><img class="work-hover" src="2026/01.png" alt=""></div>
+                        <div class="work-label"><span class="work-badge">2026</span><span class="work-name">2026 年度设计作品</span><span class="work-meta">年度精选 ↗</span></div>
+                    </a>
+                    <a class="work-card" href="gif/gif-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="gif/013n0diowpjwhw0pxoim3v3236.gif" alt=""></div>
+                        <div class="work-label"><span class="work-badge">动效</span><span class="work-name">动效设计</span><span class="work-meta">MOTION ↗</span></div>
+                    </a>
+                    <a class="work-card" href="gnsj/gnsj-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="gnsj/Frame 2.jpg" alt=""></div>
+                        <div class="work-label"><span class="work-badge">社交产品</span><span class="work-name">Mobile App</span><span class="work-meta">UI / UX ↗</span></div>
+                    </a>
+                    <a class="work-card" href="hwsj/hwsj-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="hwsj/Frame 2.jpg" alt=""></div>
+                        <div class="work-label"><span class="work-badge">海外设计</span><span class="work-name">海外设计作品集</span><span class="work-meta">GLOBAL ↗</span></div>
+                    </a>
+                    <a class="work-card" href="dp/dp-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="dp/未命名项目-图层 1.jpeg" alt=""></div>
+                        <div class="work-label"><span class="work-badge">大屏设计</span><span class="work-name">大屏设计作品集</span><span class="work-meta">DATA VIZ ↗</span></div>
+                    </a>
+                    <a class="work-card" href="ztlogo/ztlogo-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="ztlogo/方案1.jpg" alt=""></div>
+                        <div class="work-label"><span class="work-badge">LOGO</span><span class="work-name">主题 LOGO 设计集</span><span class="work-meta">BRAND ↗</span></div>
+                    </a>
+                    <a class="work-card" href="logo/logo-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="logo/10077.webp" alt=""></div>
+                        <div class="work-label"><span class="work-badge">LOGO</span><span class="work-name">LOGO 设计作品集</span><span class="work-meta">BRAND ↗</span></div>
+                    </a>
+                    <a class="work-card" href="AIGC/aigc-gallery.html" data-preview>
+                        <div class="work-visual" aria-hidden="true"><img src="AIGC/微信图片_20250702100457.png" alt=""></div>
+                        <div class="work-label"><span class="work-badge">AIGC</span><span class="work-name">AI 生成内容展示</span><span class="work-meta">GENERATIVE ↗</span></div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="outro" aria-label="收尾">
+                <div class="outro-space" aria-hidden="true"></div>
+                <div class="outro-sticky">
+                    <p class="outro-title">
+                        <span class="stagger" data-reveal>但问来路</span>
+                        <span class="stagger is-muted" data-reveal>只问破局</span>
+                    </p>
+                </div>
+            </section>
+
+            <footer class="contact" id="contact">
+                <div class="contact-lines">
+                    <p class="contact-line stagger" data-reveal>若有同道</p>
+                    <p class="contact-line stagger is-muted" data-reveal>一起做点真东西</p>
+                </div>
+                <div class="contact-foot">
+                    <a href="mailto:392084795@qq.com">392084795@qq.com</a>
+                    <div class="contact-links">
+                        <a href="tel:+15907669055">TEL</a>
+                        <a href="https://github.com/eastwen" target="_blank" rel="noopener noreferrer">GITHUB</a>
+                        <span>WECHAT: East-wen</span>
+                    </div>
+                </div>
+                <img class="contact-qr" src="img/微信图片_20250703153039.png" alt="微信二维码">
+                <p class="contact-copy">© 2026 East wen. 作品均受版权保护，未经许可不得下载或使用。</p>
+            </footer>
+        </div>
+    </div>
+
+    <button class="scrollbar" type="button" data-scrollbar aria-label="拖动浏览页面"><span class="scrollbar-thumb" data-scrollbar-thumb></span></button>
+
+    <script src="vendor/lenis.min.js"></script>
+    <script src="js/home.js?v=13"></script>
+<script type="module" src="js/hero3d.js?v=196"></script>
 </body>
 </html>
