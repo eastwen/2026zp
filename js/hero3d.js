@@ -95,6 +95,10 @@ const state = {
   hyperspaceScale: 0.1,
   hyperspaceScaleStarted: false,
   hyperspaceSpinAngle: 0,
+  hyperspaceStages: [],
+  hyperspaceRings: [],
+  hyperspaceStageGroup: '',
+  hyperspaceStageValue: -1,
   helloSize: null,
   cursorSize: null,
   lightAngle: Math.atan2(9, 4),
@@ -1075,7 +1079,7 @@ function createHyperspaceMaterial() {
     depthWrite: false,
     depthTest: true,
     toneMapped: false,
-    side: THREE.FrontSide,
+    side: THREE.DoubleSide,
   });
 }
 
@@ -1156,6 +1160,41 @@ function updatePointerFromEvent(event) {
   pointer.hover = inHelloArea ? 1 : 0;
 }
 
+function setupHyperspaceOverlay() {
+  if (!state.hyperspaceSection) return;
+
+  state.hyperspaceStages = Array.from(
+    state.hyperspaceSection.querySelectorAll('[data-hs-stage]')
+  );
+  state.hyperspaceRings = Array.from(
+    state.hyperspaceSection.querySelectorAll('[data-hs-ring]')
+  );
+
+  state.hyperspaceSection.querySelectorAll('[data-hs-line]').forEach((line, lineIndex) => {
+    if (line.dataset.hsSplit === 'true') return;
+
+    const text = line.textContent || '';
+    const characters = Array.from(text);
+    line.textContent = '';
+    line.dataset.hsSplit = 'true';
+
+    characters.forEach((character, characterIndex) => {
+      const span = document.createElement('span');
+      const noise = Math.abs(
+        Math.sin((characterIndex + 1) * 12.9898 + (lineIndex + 1) * 78.233)
+      );
+      const spread =
+        characterIndex / Math.max(1, characters.length - 1);
+      const delay = Math.round(spread * 115 + noise * 175 + lineIndex * 70);
+
+      span.className = 'hs-char';
+      span.textContent = character === ' ' ? '\u00a0' : character;
+      span.style.setProperty('--hs-delay', `${delay}ms`);
+      line.appendChild(span);
+    });
+  });
+}
+
 function bindEvents() {
   window.addEventListener('pointermove', updatePointerFromEvent, { passive: true });
   window.addEventListener('pointerleave', () => {
@@ -1168,6 +1207,7 @@ function bindEvents() {
   state.heroStage = document.querySelector('.hero-stage');
   state.spaceSection = document.querySelector('[data-space]') || document.querySelector('.manifesto');
   state.hyperspaceSection = document.querySelector('[data-hyperspace]');
+  setupHyperspaceOverlay();
   state.scrollWrapper = document.querySelector('[data-scroll-wrapper]') || window;
   state.scrollWrapper.addEventListener('scroll', () => {
     state.scrollY = state.scrollWrapper.scrollTop || window.scrollY || 0;
@@ -1392,6 +1432,107 @@ function updateCursorLight(delta) {
   });
 }
 
+function setHyperspaceStage(group) {
+  if (state.hyperspaceStageGroup === group) return;
+  state.hyperspaceStageGroup = group;
+  state.hyperspaceStages.forEach((stage) => {
+    stage.classList.toggle(
+      'is-active',
+      stage.dataset.hsStage === group
+    );
+  });
+}
+
+function hyperspaceRingRadius(distance) {
+  const offset = distance - 150;
+  const radiusSquared = 22500 - offset * offset;
+  return radiusSquared > 0 ? Math.sqrt(radiusSquared) : 0;
+}
+
+function updateHyperspaceRings(progress) {
+  if (!state.hyperspaceRings.length) return;
+
+  state.hyperspaceRings.forEach((ring) => {
+    ring.setAttribute('visibility', 'hidden');
+  });
+  if (state.hyperspaceStageGroup !== 'rings') return;
+
+  const enterSpan = 300;
+  const cycleDistance = 300;
+  const totalDistance = 945;
+  const travel = THREE.MathUtils.clamp(progress, 0, 1) * totalDistance;
+  const mode = travel <= enterSpan ? 0 : travel <= enterSpan + cycleDistance ? 1 : 2;
+  const localTravel = travel - (mode === 0 ? 0 : enterSpan + (mode - 1) * cycleDistance);
+  const passIndex = mode === 0 ? Math.floor(localTravel / 50) : 0;
+  const usedDistances = [];
+
+  state.hyperspaceRings.forEach((ring, index) => {
+    let distance = 0;
+
+    if (mode === 0) {
+      if (localTravel < index * 50) return;
+      distance =
+        localTravel -
+        (Math.min(passIndex, 6) - index) * 50;
+    } else if (mode === 1) {
+      distance =
+        ((localTravel + index * 50) % cycleDistance + cycleDistance) %
+        cycleDistance;
+    } else {
+      distance = localTravel + index * 50;
+    }
+
+    if (distance <= 0 || distance >= 300) return;
+
+    const radius = hyperspaceRingRadius(distance);
+    if (radius <= 0) return;
+    if (usedDistances.some((used) => Math.abs(used - distance) < 0.5)) {
+      return;
+    }
+    usedDistances.push(distance);
+
+    ring.setAttribute('visibility', 'visible');
+    ring.setAttribute('cx', '172');
+    ring.setAttribute('cy', String(22 + distance));
+    ring.setAttribute('rx', String(radius));
+    ring.setAttribute('ry', String(radius * 0.1));
+  });
+}
+
+function updateHyperspaceOverlay() {
+  if (!state.hyperspaceSection) return;
+
+  const rect = state.hyperspaceSection.getBoundingClientRect();
+  const viewportHeightPx = Math.max(window.innerHeight, 1);
+  const visible = rect.top <= viewportHeightPx * 0.2 && rect.bottom > 0;
+  const stage = THREE.MathUtils.clamp(
+    Math.floor(-rect.top / viewportHeightPx),
+    0,
+    7
+  );
+
+  if (state.hyperspaceStageValue !== stage) {
+    state.hyperspaceStageValue = stage;
+    state.hyperspaceSection.dataset.stage = String(stage);
+  }
+
+  let group = '';
+  if (visible) {
+    if (stage <= 1) group = 'primary';
+    else if (stage <= 3) group = 'secondary';
+    else if (stage <= 5) group = 'rings';
+    else group = 'end';
+  }
+  setHyperspaceStage(group);
+
+  const ringProgress = THREE.MathUtils.clamp(
+    (-rect.top - viewportHeightPx * 4) / (viewportHeightPx * 2),
+    0,
+    1
+  );
+  updateHyperspaceRings(ringProgress);
+}
+
 function updateHyperspaceArrow(elapsed, delta) {
   if (
     !state.hyperspaceArrow ||
@@ -1422,8 +1563,23 @@ function updateHyperspaceArrow(elapsed, delta) {
     0,
     1
   );
-  const grow = THREE.MathUtils.smoothstep(progress, 0.2, 0.46);
-  const shrink = THREE.MathUtils.smoothstep(progress, 0.55, 0.72);
+  const entryProgress = THREE.MathUtils.clamp(
+    (viewportHeightPx * 0.5 - rect.top) / (viewportHeightPx * 1.45),
+    0,
+    1
+  );
+  const sectionTravel = Math.max(0, -rect.top);
+  const shrinkStart = Math.max(0, rect.height - viewportHeightPx * 1.62);
+  const shrinkEnd = Math.max(
+    shrinkStart + 1,
+    rect.height - viewportHeightPx * 0.62
+  );
+  const grow = THREE.MathUtils.smoothstep(entryProgress, 0, 1);
+  const shrink = THREE.MathUtils.smoothstep(
+    sectionTravel,
+    shrinkStart,
+    shrinkEnd
+  );
   const scaleT = grow * (1 - shrink);
 
   const worldViewport = stickerViewportAtZ(CONFIG.hyperspace.z);
@@ -1515,6 +1671,7 @@ function render() {
   updateCameraAndLight(delta);
   updateCursorLight(delta);
   updateHyperspaceArrow(elapsed, delta);
+  updateHyperspaceOverlay();
 
   const heroLeftViewport = hasHeroLeftViewport();
   const spaceReachedViewport = hasSpaceReachedViewport();

@@ -1413,9 +1413,110 @@ button:focus-visible {
 
 .hyperspace {
     position: relative;
-    z-index: 2;
-    height: 200vh;
+    z-index: 4;
+    height: 800vh;
+    height: 800svh;
     pointer-events: none;
+}
+
+.hyperspace-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+}
+
+.hyperspace-stage {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 180ms linear;
+}
+
+.hyperspace-stage.is-active {
+    opacity: 1;
+}
+
+.hyperspace-stage--title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff8e7;
+    font-size: clamp(58px, 6.8vw, 132px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.hs-title-line,
+.hs-note-line {
+    display: block;
+    white-space: nowrap;
+}
+
+.hs-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translate3d(0, 0.18em, 0);
+    transition:
+        opacity 220ms linear var(--hs-delay, 0ms),
+        transform 280ms var(--cubic-66) var(--hs-delay, 0ms);
+}
+
+.hyperspace-stage.is-active .hs-char {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.hyperspace-ring-art {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 344px;
+    height: 344px;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+}
+
+.hyperspace-ring-art svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+}
+
+.hyperspace-note {
+    position: absolute;
+    padding: 8px;
+    color: #fff8e7;
+    font-size: clamp(18px, 1.55vw, 30px);
+    font-weight: 500;
+    line-height: 1.08;
+}
+
+.hyperspace-note--a {
+    top: 24%;
+    left: 53%;
+}
+
+.hyperspace-note--b {
+    top: 39%;
+    left: 70%;
+}
+
+.hyperspace-note--c {
+    top: 50%;
+    left: 7%;
+}
+
+.hyperspace-note--d {
+    top: 66%;
+    left: 24%;
 }
 
 .contact {
@@ -1764,7 +1865,45 @@ button:focus-visible {
     }
 
     .hyperspace {
-        height: 190vh;
+        height: 800svh;
+    }
+
+    .hyperspace-stage--title {
+        font-size: clamp(42px, 7.2svw, 64px);
+        line-height: 0.94;
+    }
+
+    .hyperspace-ring-art {
+        width: min(344px, 86vw);
+        height: min(344px, 86vw);
+    }
+
+    .hyperspace-note {
+        max-width: 82vw;
+        font-size: clamp(14px, 5.6svw, 22px);
+        line-height: 1.08;
+    }
+
+    .hyperspace-note--a {
+        top: 22%;
+        right: 5%;
+        left: auto;
+    }
+
+    .hyperspace-note--b {
+        top: 36%;
+        right: 5%;
+        left: auto;
+    }
+
+    .hyperspace-note--c {
+        top: 51%;
+        left: 5%;
+    }
+
+    .hyperspace-note--d {
+        top: 67%;
+        left: 10%;
     }
 
     .contact {
