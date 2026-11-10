@@ -570,6 +570,10 @@ button:focus-visible {
     pointer-events: none;
 }
 
+.hero-stage.is-hyperspace {
+    z-index: 3;
+}
+
 .hero-stage.has-pointer {
     clip-path: inset(0 0 0 0);
     transition-duration: 1400ms;
@@ -1050,6 +1054,370 @@ button:focus-visible {
     color: var(--label-2);
 }
 
+.folio {
+    padding: 96px var(--pad) 32px;
+}
+
+.folio-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--label-2);
+}
+
+.folio-head-title {
+    color: var(--label-2);
+}
+
+.folio-board {
+    --folio-row: clamp(190px, 17.6vw, 320px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, calc(var(--folio-row) * 2));
+    border-top: 1px solid rgba(var(--label-d), 0.16);
+    border-left: 1px solid rgba(var(--label-d), 0.16);
+}
+
+.folio-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px;
+    overflow: hidden;
+    border-right: 1px solid rgba(var(--label-d), 0.16);
+    border-bottom: 1px solid rgba(var(--label-d), 0.16);
+    background: rgba(var(--label), 0.012);
+    transition: background-color 500ms var(--cubic-66);
+}
+
+.folio-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--label-3);
+}
+
+.folio-intro {
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: flex-start;
+    background:
+        radial-gradient(95% 125% at 82% 8%, rgba(64, 116, 188, 0.4), transparent 58%),
+        radial-gradient(80% 100% at 72% 62%, rgba(118, 88, 210, 0.22), transparent 62%),
+        radial-gradient(120% 110% at 8% 100%, rgba(255, 166, 47, 0.1), transparent 56%),
+        rgba(var(--label), 0.012);
+}
+
+.folio-intro::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(var(--bg-deep), 0.1) 0%, rgba(var(--bg-deep), 0.58) 62%, rgba(var(--bg-deep), 0.86) 100%),
+        linear-gradient(90deg, rgba(var(--bg-deep), 0.35), transparent 55%);
+}
+
+.folio-intro-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-self: flex-start;
+    padding: 26px 30px 24px;
+    border: 1px solid rgba(var(--label-d), 0.16);
+}
+
+.folio-intro-title {
+    font-size: clamp(40px, 5.4vw, 92px);
+    font-weight: 700;
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+}
+
+.folio-intro-title span {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.32em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--label-2);
+}
+
+.folio-card {
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.folio-cluster {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    transition:
+        grid-template-columns 700ms var(--cubic-66),
+        grid-template-rows 700ms var(--cubic-66);
+}
+
+.folio-cluster-top {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.folio-cluster-bottom {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.folio-card.c1 { grid-column: 1; grid-row: 1; }
+.folio-card.c2 { grid-column: 2; grid-row: 1; }
+.folio-card.c3 { grid-column: 1; grid-row: 2; }
+.folio-card.c4 { grid-column: 2; grid-row: 2; }
+
+@media (hover: hover) and (min-width: 901px) {
+    .folio-cluster:has(.c1:hover) {
+        grid-template-columns: 1.32fr 0.68fr;
+        grid-template-rows: 1.32fr 0.68fr;
+    }
+
+    .folio-cluster:has(.c2:hover) {
+        grid-template-columns: 0.68fr 1.32fr;
+        grid-template-rows: 1.32fr 0.68fr;
+    }
+
+    .folio-cluster:has(.c3:hover) {
+        grid-template-columns: 1.32fr 0.68fr;
+        grid-template-rows: 0.68fr 1.32fr;
+    }
+
+    .folio-cluster:has(.c4:hover) {
+        grid-template-columns: 0.68fr 1.32fr;
+        grid-template-rows: 0.68fr 1.32fr;
+    }
+}
+
+.folio-card:hover {
+    background: rgba(var(--label), 0.055);
+    box-shadow: inset 0 0 0 1px rgba(245, 160, 0, 0.5);
+}
+
+.folio-card::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        linear-gradient(var(--accent), var(--accent)) left top / 9px 9px no-repeat,
+        linear-gradient(var(--accent), var(--accent)) right top / 9px 9px no-repeat,
+        linear-gradient(var(--accent), var(--accent)) left bottom / 9px 9px no-repeat,
+        linear-gradient(var(--accent), var(--accent)) right bottom / 9px 9px no-repeat;
+    opacity: 0;
+    transition: opacity 220ms ease;
+}
+
+.folio-card:hover::before {
+    opacity: 1;
+}
+
+.folio-card-index {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    z-index: 1;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--label-3);
+}
+
+.folio-card-arrow {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: opacity 240ms ease, transform 500ms var(--cubic-66), color 300ms ease;
+}
+
+.folio-card:hover .folio-card-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+.folio-card-body {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 56px 24px;
+    text-align: center;
+}
+
+.folio-card-tag {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    z-index: 1;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--label-2);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 240ms ease, transform 350ms var(--cubic-66);
+}
+
+.folio-card-name {
+    font-size: clamp(20px, 2.05vw, 34px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    transition: color 300ms ease;
+}
+
+.folio-card-title-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    padding: 32px 48px;
+    font-size: clamp(18px, 1.85vw, 30px);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.14;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.folio-card:hover .folio-card-name {
+    color: var(--accent);
+}
+
+.folio-card-meta {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--label-2);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 240ms ease, transform 350ms var(--cubic-66);
+}
+
+.folio-card:hover .folio-card-tag,
+.folio-card:hover .folio-card-meta {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.folio-cta {
+    grid-column: 2;
+    grid-row: 2;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--label-d), 0.035);
+}
+
+.folio-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(to bottom right, transparent calc(50% - 0.5px), rgba(var(--label-d), 0.16) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(to bottom left, transparent calc(50% - 0.5px), rgba(var(--label-d), 0.16) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(to top right, transparent calc(50% - 0.5px), rgba(var(--label-d), 0.16) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(to top left, transparent calc(50% - 0.5px), rgba(var(--label-d), 0.16) 50%, transparent calc(50% + 0.5px));
+    background-size: 26% 26%;
+    background-position: left top, right top, left bottom, right bottom;
+    background-repeat: no-repeat;
+    opacity: 0.75;
+}
+
+.folio-cta:hover {
+    background: rgba(var(--label-d), 0.06);
+}
+
+.folio-cta-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: min(76%, 460px);
+    padding: 26px 28px;
+    border: 1px solid rgba(var(--label-d), 0.2);
+}
+
+.folio-cta-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.folio-cta-title {
+    font-size: clamp(30px, 3.8vw, 60px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    transition: color 300ms ease;
+}
+
+.folio-cta:hover .folio-cta-title {
+    color: var(--accent);
+}
+
+.folio-cta-sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--label-3);
+}
+
+.folio-cta .folio-card-arrow {
+    position: static;
+    opacity: 1;
+    transform: none;
+    font-size: clamp(24px, 2.4vw, 36px);
+}
+
+.hyperspace {
+    position: relative;
+    z-index: 2;
+    height: 200vh;
+    pointer-events: none;
+}
+
 .contact {
     position: relative;
     display: flex;
@@ -1305,6 +1673,55 @@ button:focus-visible {
         margin-top: 32px;
     }
 
+    .folio {
+        padding: 72px var(--pad) 24px;
+    }
+
+    .folio-board {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .folio-intro {
+        grid-column: 1;
+        grid-row: auto;
+        min-height: 400px;
+    }
+
+    .folio-cluster {
+        grid-column: 1;
+        grid-row: auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+    }
+
+    .folio-cluster .folio-card {
+        grid-column: auto;
+        grid-row: auto;
+        min-height: 200px;
+    }
+
+    .folio-cta {
+        grid-column: 1;
+        grid-row: auto;
+        min-height: 300px;
+    }
+
+    .folio-card .folio-card-arrow,
+    .folio-card-tag,
+    .folio-card-meta {
+        opacity: 1;
+        transform: none;
+    }
+
+    .folio-cta-inner {
+        width: 100%;
+    }
+
+    .folio-head {
+        font-size: 11px;
+    }
+
     .work {
         padding: 64px var(--pad);
     }
@@ -1344,6 +1761,10 @@ button:focus-visible {
 
     .outro-title {
         font-size: clamp(34px, 8vw, 64px);
+    }
+
+    .hyperspace {
+        height: 190vh;
     }
 
     .contact {
@@ -1515,6 +1936,26 @@ button:focus-visible {
 }
 
 @media (max-width: 639px) {
+    .folio-board {
+        grid-template-columns: 1fr;
+    }
+
+    .folio-cluster {
+        grid-template-columns: 1fr;
+    }
+
+    .folio-intro {
+        min-height: 360px;
+    }
+
+    .folio-cluster .folio-card {
+        min-height: 176px;
+    }
+
+    .folio-card-name {
+        font-size: 22px;
+    }
+
     .manifesto-portrait,
     .manifesto-copy {
         grid-column: 1 / -1;

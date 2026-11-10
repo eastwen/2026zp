@@ -14,9 +14,9 @@ class FooterComponent {
                     <h2>联系我</h2>
                     <p>如果您对我的作品感兴趣，或者有任何合作意向，欢迎通过以下方式联系我：</p>
                     <div class="contact-info">
-                        <p style="font-weight: 500;">邮箱: <a href="mailto:392084795@qq.com">392084795@qq.com</a></p>
-                        <p style="font-weight: 500;">电话: <a href="tel:+15907669055">15907669055</a></p>
-                        <p style="font-weight: 500;">微信: <span class="wechat-contact" onclick="event.preventDefault()">
+                        <p style="font-weight: 500;">邮箱 <a href="mailto:392084795@qq.com">392084795@qq.com</a></p>
+                        <p style="font-weight: 500;">电话 <a href="tel:+15907669055">15907669055</a></p>
+                        <p style="font-weight: 500;">微信 <span class="wechat-contact" onclick="event.preventDefault()">
     <span class="wechat-label qr-bubble-wrap">East-wen
         <span class="qr-bubble qr-bubble--bottom">
             <span class="qr-bubble__inner">
@@ -29,7 +29,7 @@ class FooterComponent {
 
                     <!-- 法律保护 - 版权声明 -->
                     <div class="copyright-notice">
-                        <p>© 2025 East wen. 所有作品均受版权保护，未经许可不得下载或使用。</p>
+                        <p>© 2026 East wen. 所有作品均受版权保护，未经许可不得下载或使用。</p>
                         <p>All works are protected by copyright. Download or use without permission is prohibited.</p>
                         <p style="font-size: 12px; margin-top: 10px; opacity: 0.7;">
                             本网站内容受《中华人民共和国著作权法》保护 | Protected by Copyright Law

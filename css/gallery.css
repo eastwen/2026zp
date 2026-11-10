@@ -1,0 +1,445 @@
+@font-face {
+    font-family: "TikTok Sans";
+    src: url("../assets/reference/fonts/TikTokSans.ttf") format("truetype");
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Geist Mono";
+    src: url("../assets/reference/fonts/GeistMono.ttf") format("truetype");
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+:root {
+    --g-label: 255, 247, 220;
+    --g-label-d: 255, 214, 120;
+    --g-bg: 3, 3, 2;
+    --g-text: rgba(var(--g-label), 1);
+    --g-text-2: rgba(var(--g-label-d), 0.66);
+    --g-text-3: rgba(var(--g-label-d), 0.34);
+    --g-line: rgba(var(--g-label-d), 0.16);
+    --g-accent: #f5a000;
+    --g-pad: 56px;
+    --g-head: 96px;
+    --g-cubic: cubic-bezier(0.66, 0, 0.01, 1);
+    --g-sans: "TikTok Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --g-mono: "Geist Mono", "PingFang SC", monospace;
+    color-scheme: dark;
+}
+
+html {
+    background: rgb(var(--g-bg));
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--g-label-d), 0.4) transparent;
+}
+
+body {
+    margin: 0;
+    min-width: 0;
+    background: rgb(var(--g-bg));
+    color: var(--g-text);
+    font-family: var(--g-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+.grid-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.grid-overlay svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.grid-overlay path.grid-lines {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+
+.grid-overlay path.grid-ticks {
+    stroke: #ffffff;
+    opacity: 0.4;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 0%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+/* ---- 子页面导航 ---- */
+
+header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 40;
+    background: linear-gradient(180deg, rgba(3, 3, 2, 0.94), rgba(3, 3, 2, 0.74) 70%, transparent);
+    border-bottom: 1px solid var(--g-line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    padding: 20px var(--g-pad);
+}
+
+header .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--g-text);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+header .logo span {
+    color: var(--g-accent);
+    font-family: var(--g-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+}
+
+header .logo::before {
+    content: "";
+    width: 3px;
+    height: 16px;
+    background: var(--g-accent);
+}
+
+header .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+header .theme-toggle {
+    display: none;
+}
+
+header .nav-links {
+    display: flex;
+    gap: 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+}
+
+header .nav-links a {
+    color: var(--g-text-2);
+    transition: color 200ms ease;
+}
+
+header .nav-links a:hover {
+    color: var(--g-text);
+}
+
+body > .back-to-home,
+.back-to-home {
+    display: none;
+}
+
+.portfolio {
+    position: relative;
+    z-index: 1;
+    max-width: none;
+    margin: 0;
+    padding: calc(var(--g-head) + 40px) var(--g-pad) 64px;
+    border: 0;
+}
+
+.portfolio .container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+li.portfolio-item,
+.portfolio-item {
+    display: block;
+    background: rgba(var(--g-label), 0.012);
+    box-shadow: none;
+    border-radius: 0;
+    transition: background-color 300ms ease;
+}
+
+.portfolio-item:hover {
+    transform: none !important;
+    background: rgba(var(--g-label), 0.05);
+    box-shadow: none !important;
+}
+
+.portfolio-item::before {
+    background: var(--g-accent) !important;
+    transform: none !important;
+    opacity: 0;
+    transition: opacity 240ms ease;
+}
+
+.portfolio-item:hover::before {
+    opacity: 1;
+}
+
+.aigc-item img,
+.aigc-item video {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    object-fit: cover;
+    filter: brightness(0.97);
+    transition: transform 900ms var(--g-cubic), filter 400ms ease;
+}
+
+.portfolio-item img,
+.portfolio-item video {
+    border-radius: 0 !important;
+}
+
+.aigc-item:hover img,
+.aigc-item:hover video {
+    filter: brightness(1);
+}
+
+/* ---- 加载与动画 ---- */
+
+.lazy-placeholder {
+    background: linear-gradient(100deg, rgba(var(--g-label), 0.04), rgba(var(--g-label), 0.08), rgba(var(--g-label), 0.04));
+    background-size: 220% 100%;
+    animation: gallery-shimmer 1.6s linear infinite;
+}
+
+@keyframes gallery-shimmer {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
+
+/* ---- 页脚 ---- */
+
+footer#contact,
+footer.contact {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0 var(--g-pad);
+    border-top: 1px solid var(--g-line);
+    background: transparent;
+    color: var(--g-text);
+}
+
+footer .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: none;
+    margin: 0;
+    padding: 72px 0 40px;
+}
+
+footer .footer-content h2 {
+    margin: 0;
+    font-size: clamp(32px, 4vw, 64px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+footer .footer-content p {
+    max-width: 46em;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--g-text-2);
+    text-align: center;
+}
+
+footer .footer-content > p {
+    font-size: 18px;
+}
+
+footer .contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 36px;
+    margin-top: 10px;
+    font-family: var(--g-mono);
+    font-size: 16px;
+}
+
+footer .contact-info p {
+    max-width: none;
+    margin: 0;
+    font-weight: 500 !important;
+    color: var(--g-text-2);
+}
+
+footer .contact-info a,
+footer .wechat-contact {
+    color: var(--g-accent) !important;
+}
+
+footer .copyright-notice {
+    margin: 34px calc(var(--g-pad) * -1) 0;
+    padding: 20px var(--g-pad) 0;
+    border-top: 1px solid var(--g-line);
+    text-align: center;
+}
+
+footer .copyright-notice p {
+    max-width: none;
+    font-size: 11px;
+    color: var(--g-text-3);
+    margin: 0 auto 6px;
+    text-align: center;
+}
+
+footer .copyright-notice p:first-child {
+    color: var(--g-text-2);
+}
+
+/* ---- 图片灯箱 ---- */
+
+.image-modal {
+    background-color: rgba(3, 3, 2, 0.94) !important;
+    backdrop-filter: blur(10px);
+}
+
+.close-btn,
+.modal-btn {
+    border-radius: 0 !important;
+    background: rgba(3, 3, 2, 0.8) !important;
+    border: 1px solid var(--g-line) !important;
+    color: var(--g-text) !important;
+}
+
+.close-btn:hover,
+.modal-btn:hover {
+    border-color: var(--g-accent) !important;
+    color: var(--g-accent) !important;
+}
+
+.zoom-info {
+    border-radius: 0 !important;
+    border: 1px solid var(--g-line);
+    font-family: var(--g-mono);
+    font-size: 11px !important;
+    letter-spacing: 0.1em;
+}
+
+.zoom-controls {
+    border-radius: 0 !important;
+    background: rgba(3, 3, 2, 0.86) !important;
+    border: 1px solid var(--g-line) !important;
+}
+
+/* ---- 响应式 ---- */
+
+@media (max-width: 1100px) {
+    :root {
+        --g-pad: 28px;
+        --g-head: 84px;
+    }
+
+    header .nav-links {
+        gap: 14px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 900px) {
+    :root {
+        --g-pad: 18px;
+        --g-head: 76px;
+    }
+
+    header nav {
+        padding: 14px var(--g-pad);
+        gap: 12px;
+    }
+
+    header .logo {
+        font-size: 15px;
+    }
+
+    header .nav-right {
+        gap: 12px;
+    }
+
+    header .nav-links {
+        gap: 12px;
+        font-size: 11px;
+    }
+
+    header .nav-links li:nth-child(2),
+    header .nav-links li:nth-child(4) {
+        display: none;
+    }
+
+    .portfolio {
+        padding: var(--g-head) var(--g-pad) 40px;
+    }
+}
+
+@media (max-width: 639px) {
+
+    footer .contact-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    footer .footer-content {
+        padding: 48px 0 28px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
