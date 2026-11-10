@@ -14,7 +14,7 @@ class HeaderComponent {
         const homeLink = this.isSubPage ? `${this.basePath}index.html` : '#home';
         const aboutLink = this.isSubPage ? `${this.basePath}index.html#about` : '#about';
         const portfolioLink = this.isSubPage ? `${this.basePath}index.html#portfolio` : '#portfolio';
-        const contactLink = this.isSubPage ? `${this.basePath}index.html#contact` : '#contact';
+        const contactLink = 'mailto:392084795@qq.com';
 
         return `
             <header>

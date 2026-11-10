@@ -94,6 +94,8 @@ const state = {
   hyperspaceCounterTilt: null,
   hyperspaceScale: 0.1,
   hyperspaceScaleStarted: false,
+  hyperspaceFullscreen: false,
+  hyperspaceContentUnlocked: false,
   hyperspaceSpinAngle: 0,
   hyperspaceStages: [],
   hyperspaceRings: [],
@@ -1170,9 +1172,14 @@ function setupHyperspaceOverlay() {
     state.hyperspaceSection.querySelectorAll('[data-hs-ring]')
   );
 
-  state.hyperspaceSection.querySelectorAll('[data-hs-line]').forEach((line, lineIndex) => {
+  state.hyperspaceSection.querySelectorAll('[data-hs-line]').forEach((line) => {
     if (line.dataset.hsSplit === 'true') return;
 
+    const stage = line.closest('[data-hs-stage]');
+    const stageLines = stage
+      ? Array.from(stage.querySelectorAll('[data-hs-line]'))
+      : [];
+    const lineIndex = Math.max(0, stageLines.indexOf(line));
     const text = line.textContent || '';
     const characters = Array.from(text);
     line.textContent = '';
@@ -1504,9 +1511,17 @@ function updateHyperspaceOverlay() {
 
   const rect = state.hyperspaceSection.getBoundingClientRect();
   const viewportHeightPx = Math.max(window.innerHeight, 1);
-  const visible = rect.top <= viewportHeightPx * 0.2 && rect.bottom > 0;
+  const visible =
+    rect.top <= viewportHeightPx * 0.2 &&
+    rect.bottom >= -1 &&
+    state.hyperspaceContentUnlocked;
+  const stageProgress = THREE.MathUtils.clamp(
+    -rect.top / viewportHeightPx,
+    0,
+    8
+  );
   const stage = THREE.MathUtils.clamp(
-    Math.floor(-rect.top / viewportHeightPx),
+    Math.floor(stageProgress),
     0,
     7
   );
@@ -1518,9 +1533,9 @@ function updateHyperspaceOverlay() {
 
   let group = '';
   if (visible) {
-    if (stage <= 1) group = 'primary';
-    else if (stage <= 3) group = 'secondary';
-    else if (stage <= 5) group = 'rings';
+    if (stageProgress < 2) group = 'primary';
+    else if (stageProgress < 4) group = 'secondary';
+    else if (stageProgress < 5.45) group = 'rings';
     else group = 'end';
   }
   setHyperspaceStage(group);
@@ -1531,6 +1546,12 @@ function updateHyperspaceOverlay() {
     1
   );
   updateHyperspaceRings(ringProgress);
+}
+
+function isHyperspaceSectionInViewport() {
+  if (!state.hyperspaceSection) return false;
+  const rect = state.hyperspaceSection.getBoundingClientRect();
+  return rect.top < window.innerHeight && rect.bottom >= -1;
 }
 
 function updateHyperspaceArrow(elapsed, delta) {
@@ -1545,15 +1566,19 @@ function updateHyperspaceArrow(elapsed, delta) {
 
   const rect = state.hyperspaceSection.getBoundingClientRect();
   const viewportHeightPx = Math.max(window.innerHeight, 1);
-  const active = rect.top < viewportHeightPx && rect.bottom > 0;
+  const active = isHyperspaceSectionInViewport();
   state.hyperspaceArrow.visible = active;
 
   if (!active) {
     state.hyperspaceScale = CONFIG.hyperspace.restScale;
     state.hyperspaceSpinAngle = 0;
     state.hyperspaceScaleStarted = false;
+    state.hyperspaceFullscreen = false;
+    state.hyperspaceContentUnlocked = false;
+    state.hyperspaceSection.style.setProperty('--hs-end-shift', '0%');
     state.hyperspaceArrow.scale.setScalar(CONFIG.hyperspace.restScale);
     state.hyperspaceSpin.rotation.y = 0;
+    state.hyperspaceArrowMaterial.uniforms.uOpacity.value = 1;
     state.hyperspaceArrowMaterial.uniforms.uStripeReveal.value = 0;
     return;
   }
@@ -1568,17 +1593,26 @@ function updateHyperspaceArrow(elapsed, delta) {
     0,
     1
   );
+  const riseProgress = THREE.MathUtils.clamp(
+    (viewportHeightPx - rect.top) / (viewportHeightPx * 0.82),
+    0,
+    1
+  );
   const sectionTravel = Math.max(0, -rect.top);
-  const shrinkStart = Math.max(0, rect.height - viewportHeightPx * 1.62);
+  const shrinkStart = Math.max(0, rect.height - viewportHeightPx * 2.1);
   const shrinkEnd = Math.max(
     shrinkStart + 1,
-    rect.height - viewportHeightPx * 0.62
+    rect.height - viewportHeightPx * 1.05
   );
   const grow = THREE.MathUtils.smoothstep(entryProgress, 0, 1);
   const shrink = THREE.MathUtils.smoothstep(
     sectionTravel,
     shrinkStart,
     shrinkEnd
+  );
+  state.hyperspaceSection.style.setProperty(
+    '--hs-end-shift',
+    `${(-37 * shrink).toFixed(3)}%`
   );
   const scaleT = grow * (1 - shrink);
 
@@ -1603,7 +1637,19 @@ function updateHyperspaceArrow(elapsed, delta) {
     );
   }
   state.hyperspaceArrow.scale.setScalar(state.hyperspaceScale);
-
+  const scaleProgress = THREE.MathUtils.clamp(
+    (state.hyperspaceScale - CONFIG.hyperspace.restScale) /
+      Math.max(maxScale - CONFIG.hyperspace.restScale, 1e-6),
+    0,
+    1
+  );
+  state.hyperspaceFullscreen = scaleProgress >= 0.5;
+  const inEndStage = -rect.top >= viewportHeightPx * 5.45;
+  if (scaleProgress >= 0.68 || inEndStage) {
+    state.hyperspaceContentUnlocked = true;
+  } else if (rect.top > viewportHeightPx * 0.2) {
+    state.hyperspaceContentUnlocked = false;
+  }
   const targetSpin =
     THREE.MathUtils.degToRad(CONFIG.hyperspace.spinDegrees) * (grow + shrink);
   state.hyperspaceSpinAngle = THREE.MathUtils.damp(
@@ -1624,10 +1670,11 @@ function updateHyperspaceArrow(elapsed, delta) {
     1
   );
 
+  const rise = THREE.MathUtils.smoothstep(riseProgress, 0, 1);
   const arrowY = THREE.MathUtils.lerp(
-    -worldViewport.height * (isMobileViewport() ? 0.36 : 0.26),
+    -worldViewport.height * (isMobileViewport() ? 0.66 : 0.58),
     -worldViewport.height * 0.025,
-    grow
+    rise
   );
   state.hyperspaceArrow.position.set(0, arrowY, CONFIG.hyperspace.z);
 }
@@ -1648,8 +1695,6 @@ function render() {
   const targetActive = pointer.hover
     ? THREE.MathUtils.clamp(pointer.velocity.length() * 65, 0, 0.8)
     : 0;
-  const activeUniform = state.postMaterial.uniforms.uPointerActive;
-  activeUniform.value += (targetActive - activeUniform.value) * 0.18;
   state.postMaterial.uniforms.uPointerVelocity.value.copy(pointer.velocity);
   state.postMaterial.uniforms.uMousePos.value.copy(pointer.uv);
   state.postMaterial.uniforms.uTime.value = elapsed;
@@ -1672,6 +1717,16 @@ function render() {
   updateCursorLight(delta);
   updateHyperspaceArrow(elapsed, delta);
   updateHyperspaceOverlay();
+  const arrowSpaceActive = Boolean(state.hyperspaceFullscreen);
+  const activeUniform = state.postMaterial.uniforms.uPointerActive;
+  if (arrowSpaceActive) {
+    activeUniform.value = 0;
+  } else {
+    activeUniform.value += (targetActive - activeUniform.value) * 0.18;
+  }
+  if (state.fluidPass) {
+    state.fluidPass.setEffectEnabled(!arrowSpaceActive);
+  }
 
   const heroLeftViewport = hasHeroLeftViewport();
   const spaceReachedViewport = hasSpaceReachedViewport();
@@ -1738,7 +1793,11 @@ function render() {
     state.postTarget.texture,
     state.flareTarget
   );
-  state.fluidPass.updatePointer(pointer.targetUv, pointer.inside, delta);
+  state.fluidPass.updatePointer(
+    pointer.targetUv,
+    pointer.inside && !arrowSpaceActive,
+    delta
+  );
   state.fluidPass.render(
     state.renderer,
     state.flareTarget.texture,

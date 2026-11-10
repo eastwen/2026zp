@@ -1452,6 +1452,11 @@ button:focus-visible {
     text-transform: uppercase;
 }
 
+.hyperspace-stage--title[data-hs-stage="end"] {
+    transform: translate3d(0, var(--hs-end-shift, 0%), 0);
+    will-change: transform;
+}
+
 .hs-title-line,
 .hs-note-line {
     display: block;
