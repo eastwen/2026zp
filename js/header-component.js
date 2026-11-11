@@ -1,156 +1,198 @@
-// Header组件
+// Header 组件
 class HeaderComponent {
     constructor(options = {}) {
         this.isSubPage = options.isSubPage || false;
         this.basePath = this.isSubPage ? '../' : '';
-        this.currentTheme = 'light'; // 默认主题
-        
-        // 将事件处理器绑定到实例
-        this.handleThemeChange = this.handleThemeChange.bind(this);
+        this.handleThemeToggle = this.handleThemeToggle.bind(this);
+        this.handleSoundToggle = this.handleSoundToggle.bind(this);
+        this.handleMenuToggle = this.handleMenuToggle.bind(this);
+
+        this.audioContext = null;
+        this.oscillator = null;
+        this.gain = null;
     }
 
-    // 生成header HTML
     generateHTML() {
         const homeLink = this.isSubPage ? `${this.basePath}index.html` : '#home';
-        const aboutLink = this.isSubPage ? `${this.basePath}index.html#about` : '#about';
-        const portfolioLink = this.isSubPage ? `${this.basePath}index.html#portfolio` : '#portfolio';
+        const portfolioLink = this.isSubPage ? `${this.basePath}index.html#work` : '#work';
         const contactLink = 'mailto:392084795@qq.com';
 
         return `
-            <header>
-                <nav>
-                    <a href="${homeLink}" class="logo">East  wen</a>
-                    <div class="nav-right">
-                        <div class="theme-toggle">
-                            <input type="checkbox" id="theme-switch" class="theme-switch">
-                            <label for="theme-switch" class="theme-label"></label>
-                        </div>
-                        <ul class="nav-links">
-                            <li><a href="${homeLink}">主页</a></li>
-                            <li><a href="${aboutLink}">自我介绍</a></li>
-                            <li><a href="${portfolioLink}">作品列表</a></li>
-                            <li><a href="${contactLink}">联系方式</a></li>
-                        </ul>
+            <header class="site-head" aria-label="站点导航">
+                <div class="head-top">
+                    <a class="wordmark" href="${homeLink}" aria-label="回到顶部"><span>East wen</span></a>
+                    <div class="head-links" id="site-menu">
+                        <a href="${portfolioLink}">作品</a>
+                        <a href="${contactLink}">联系</a>
+                        <button type="button" data-theme-toggle aria-label="切换主题">主题[D]</button>
+                        <button type="button" data-sound-toggle aria-pressed="false" aria-label="播放声音">声音[I]</button>
                     </div>
-                </nav>
+                    <button class="head-menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="打开菜单">
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
             </header>
         `;
     }
 
-    // 安全的主题存储方法
-    saveTheme(theme) {
-        try {
-            if (typeof Storage !== 'undefined') {
-                localStorage.setItem('theme', theme);
-            }
-        } catch (e) {
-            console.warn('无法保存主题设置:', e);
-        }
-        this.currentTheme = theme;
-    }
-
-    // 安全的主题读取方法
     getSavedTheme() {
         try {
-            if (typeof Storage !== 'undefined') {
-                return localStorage.getItem('theme') || 'light';
-            }
-        } catch (e) {
-            console.warn('无法读取主题设置:', e);
+            return localStorage.getItem('theme') || 'dark';
+        } catch (error) {
+            return 'dark';
         }
-        return this.currentTheme;
     }
 
-    // 应用主题
     applyTheme(theme) {
-        const body = document.body;
         const html = document.documentElement;
-        
-        if (theme === 'dark') {
-            body.classList.add('dark-theme');
-            html.classList.add('dark-theme');
-            html.setAttribute('data-theme', 'dark');
-        } else {
-            body.classList.remove('dark-theme');
-            html.classList.remove('dark-theme');
-            html.setAttribute('data-theme', 'light');
+        html.classList.toggle('light', theme === 'light');
+        html.classList.toggle('dark', theme === 'dark');
+        html.classList.toggle('dark-theme', theme === 'dark');
+        html.setAttribute('data-theme', theme);
+        document.body.classList.toggle('dark-theme', theme === 'dark');
+
+        const toggle = document.querySelector('[data-theme-toggle]');
+        if (toggle) toggle.textContent = theme === 'light' ? '主题[L]' : '主题[D]';
+    }
+
+    handleThemeToggle() {
+        const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+        this.applyTheme(next);
+        try {
+            localStorage.setItem('theme', next);
+        } catch (error) {
+            return;
         }
-        
-        // 更新开关状态
-        const themeSwitch = document.querySelector('#theme-switch');
-        if (themeSwitch) {
-            themeSwitch.checked = (theme === 'dark');
-        }
     }
 
-    // 应用初始主题
-    applyInitialTheme() {
-        const savedTheme = this.getSavedTheme();
-        this.applyTheme(savedTheme);
-        console.log('Applied initial theme:', savedTheme);
-    }
-
-    // 主题切换事件处理器
-    handleThemeChange(event) {
-        const newTheme = event.target.checked ? 'dark' : 'light';
-        this.applyTheme(newTheme);
-        this.saveTheme(newTheme);
-        console.log('Theme switched to:', newTheme);
-    }
-
-    // 初始化主题切换功能
     initThemeToggle() {
-        const themeSwitch = document.querySelector('#theme-switch');
-        
-        if (!themeSwitch) {
-            console.error('Theme switch element not found!');
+        const toggle = document.querySelector('[data-theme-toggle]');
+        if (!toggle) return;
+        toggle.addEventListener('click', this.handleThemeToggle);
+        this.applyTheme(this.getSavedTheme());
+    }
+
+    handleSoundToggle() {
+        const toggle = document.querySelector('[data-sound-toggle]');
+        if (!toggle) return;
+
+        if (this.oscillator) {
+            this.stopSound();
             return;
         }
 
-        console.log('Initializing theme toggle...');
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
 
-        // 移除可能存在的旧事件监听器
-        themeSwitch.removeEventListener('change', this.handleThemeChange);
-        
-        // 添加事件监听器
-        themeSwitch.addEventListener('change', this.handleThemeChange);
+        this.audioContext = this.audioContext || new AudioContext();
+        this.audioContext.resume();
+        this.oscillator = this.audioContext.createOscillator();
+        this.gain = this.audioContext.createGain();
+        this.oscillator.type = 'sine';
+        this.oscillator.frequency.value = 54;
+        this.gain.gain.value = 0.012;
+        this.oscillator.connect(this.gain);
+        this.gain.connect(this.audioContext.destination);
+        this.oscillator.start();
 
-        console.log('Theme toggle initialized successfully');
+        toggle.setAttribute('aria-pressed', 'true');
+        toggle.setAttribute('aria-label', '声音播放中，点击暂停');
+        toggle.textContent = '声音[-]';
     }
 
-    // 渲染header到页面
+    stopSound() {
+        const toggle = document.querySelector('[data-sound-toggle]');
+        if (this.oscillator) {
+            try {
+                this.oscillator.stop();
+            } catch (error) {
+                this.oscillator = null;
+            }
+            this.oscillator = null;
+        }
+        if (this.gain) {
+            this.gain.disconnect();
+            this.gain = null;
+        }
+        if (toggle) {
+            toggle.setAttribute('aria-pressed', 'false');
+            toggle.setAttribute('aria-label', '播放声音');
+            toggle.textContent = '声音[I]';
+        }
+    }
+
+    initSoundToggle() {
+        const toggle = document.querySelector('[data-sound-toggle]');
+        if (!toggle) return;
+        toggle.addEventListener('click', this.handleSoundToggle);
+    }
+
+    setMenuOpen(open) {
+        const header = document.querySelector('header.site-head');
+        const toggle = document.querySelector('[data-menu-toggle]');
+        if (!header || !toggle) return;
+        header.classList.toggle('is-menu-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+    }
+
+    handleMenuToggle(event) {
+        event.stopPropagation();
+        const header = document.querySelector('header.site-head');
+        this.setMenuOpen(!header.classList.contains('is-menu-open'));
+    }
+
+    initMenu() {
+        const header = document.querySelector('header.site-head');
+        const toggle = document.querySelector('[data-menu-toggle]');
+        const links = document.querySelector('.head-links');
+        if (!header || !toggle || !links) return;
+
+        toggle.addEventListener('click', this.handleMenuToggle);
+        links.addEventListener('click', (event) => {
+            if (event.target.closest('a, button')) this.setMenuOpen(false);
+        });
+        document.addEventListener('click', (event) => {
+            if (!header.classList.contains('is-menu-open')) return;
+            if (header.contains(event.target)) return;
+            this.setMenuOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            this.setMenuOpen(false);
+            toggle.focus();
+        });
+    }
+
     render(targetElement = 'body') {
         const target = typeof targetElement === 'string'
             ? document.querySelector(targetElement)
             : targetElement;
+        if (!target) return;
 
-        if (target) {
-            // 如果是body，插入到开头；否则替换目标元素
-            if (targetElement === 'body') {
-                target.insertAdjacentHTML('afterbegin', this.generateHTML());
-            } else {
-                target.innerHTML = this.generateHTML();
-            }
-
-            // 立即应用初始主题
-            this.applyInitialTheme();
-
-            // 确保DOM完全渲染后初始化主题切换
-            requestAnimationFrame(() => {
-                this.initThemeToggle();
-            });
+        if (targetElement === 'body') {
+            target.insertAdjacentHTML('afterbegin', this.generateHTML());
+        } else {
+            target.innerHTML = this.generateHTML();
         }
+
+        this.applyTheme(this.getSavedTheme());
+        this.initThemeToggle();
+        this.initSoundToggle();
+        this.initMenu();
     }
 
-    // 销毁方法（用于清理事件监听器）
     destroy() {
-        const themeSwitch = document.querySelector('#theme-switch');
-        if (themeSwitch && this.handleThemeChange) {
-            themeSwitch.removeEventListener('change', this.handleThemeChange);
-        }
+        this.stopSound();
+        const themeToggle = document.querySelector('[data-theme-toggle]');
+        const soundToggle = document.querySelector('[data-sound-toggle]');
+        const menuToggle = document.querySelector('[data-menu-toggle]');
+        if (themeToggle) themeToggle.removeEventListener('click', this.handleThemeToggle);
+        if (soundToggle) soundToggle.removeEventListener('click', this.handleSoundToggle);
+        if (menuToggle) menuToggle.removeEventListener('click', this.handleMenuToggle);
     }
 
-    // 静态方法：快速创建并渲染header
     static create(options = {}) {
         const header = new HeaderComponent(options);
         header.render();
@@ -158,7 +200,6 @@ class HeaderComponent {
     }
 }
 
-// 导出组件
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = HeaderComponent;
 } else {

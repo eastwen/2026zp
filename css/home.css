@@ -227,6 +227,9 @@ button:focus-visible {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin: 0 calc(var(--pad) * -1);
+    padding: 9px var(--pad);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .head-top .wordmark {
@@ -236,7 +239,7 @@ button:focus-visible {
 .head-top .head-links {
     flex-wrap: nowrap;
     margin-left: auto;
-    column-gap: 4px;
+    column-gap: 20px;
 }
 
 .head-top .head-menu-toggle {
@@ -299,43 +302,9 @@ button:focus-visible {
     display: inline-flex;
     align-items: flex-end;
     gap: 9px;
-    padding: 10px 12px 10px 22px;
+    padding: 10px 12px;
     font-weight: 700;
     pointer-events: auto;
-}
-
-.wordmark::before {
-    content: "";
-    position: absolute;
-    left: 9px;
-    top: 9px;
-    bottom: 9px;
-    width: 3px;
-    background: #f5a000;
-    box-shadow: 0 0 12px rgba(245, 160, 0, 0.35);
-    transition: width 250ms ease, background-color 250ms ease;
-}
-
-.wordmark::after {
-    content: "";
-    position: absolute;
-    left: 22px;
-    bottom: 8px;
-    width: 18px;
-    height: 1px;
-    background: #ff6a21;
-    opacity: 0;
-    transition: opacity 200ms ease, transform 350ms ease;
-}
-
-.wordmark:hover::before {
-    width: 5px;
-    background: #ff6a21;
-}
-
-.wordmark:hover::after {
-    opacity: 1;
-    transform: translateX(70px);
 }
 
 .wordmark > span:first-child {
@@ -344,19 +313,11 @@ button:focus-visible {
     color: var(--label-1);
 }
 
-.wordmark > span:last-child {
-    margin-bottom: 1px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1;
-    color: var(--accent);
-}
-
 .head-links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px;
+    gap: 20px;
     pointer-events: auto;
 }
 
@@ -655,27 +616,6 @@ button:focus-visible {
     line-height: 1;
 }
 
-.hero-copy {
-    position: absolute;
-    right: calc(var(--pad) * 2);
-    bottom: calc(clamp(24px, 2.2vh, 34px) + 72px);
-    left: calc(var(--pad) * 0.5 + 12px);
-    z-index: 3;
-    pointer-events: none;
-}
-
-.hero-title {
-    max-width: 13em;
-    font-size: clamp(34px, 3.6vw, 68px);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 0.98;
-}
-
-.hero-title span {
-    display: block;
-}
-
 .hero-scroll {
     display: none;
 }
@@ -712,11 +652,14 @@ button:focus-visible {
         rgba(var(--label), 0.03);
 }
 
-.manifesto-portrait-mark {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--label-3);
+.manifesto-portrait-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .manifesto-copy {
@@ -728,8 +671,16 @@ button:focus-visible {
     line-height: 1;
 }
 
+.manifesto-copy.is-long-copy {
+    font-size: clamp(18px, 2.7vw, 44px);
+    line-height: 1.18;
+}
+
 .manifesto-copy p {
     padding: 8px;
+    text-align: justify;
+    text-align-last: left;
+    text-justify: inter-ideograph;
     text-wrap: balance;
 }
 
@@ -1443,6 +1394,7 @@ button:focus-visible {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.06em;
     color: #fff8e7;
     font-size: clamp(58px, 6.8vw, 132px);
     font-weight: 800;
@@ -1707,17 +1659,6 @@ button:focus-visible {
         min-height: 680px;
     }
 
-    .hero-copy {
-        right: 24px;
-        bottom: 48px;
-        left: 24px;
-    }
-
-    .hero-title {
-        font-size: clamp(30px, 8vw, 56px);
-        line-height: 1.02;
-    }
-
     .hero-scroll {
         display: none;
     }
@@ -1884,31 +1825,48 @@ button:focus-visible {
     }
 
     .hyperspace-note {
-        max-width: 82vw;
-        font-size: clamp(14px, 5.6svw, 22px);
-        line-height: 1.08;
+        max-width: calc(100vw - 56px);
+        padding: 0;
+        font-size: clamp(18px, 5.4svw, 26px);
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0.01em;
+        text-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.95),
+            0 8px 24px rgba(0, 0, 0, 0.9);
+    }
+
+    .hyperspace-note .hs-note-line {
+        white-space: normal;
+        text-wrap: balance;
     }
 
     .hyperspace-note--a {
-        top: 22%;
-        right: 5%;
+        top: 12%;
+        right: 7%;
         left: auto;
+        text-align: right;
     }
 
     .hyperspace-note--b {
-        top: 36%;
-        right: 5%;
-        left: auto;
+        top: 24%;
+        right: auto;
+        left: 7%;
+        text-align: left;
     }
 
     .hyperspace-note--c {
-        top: 51%;
-        left: 5%;
+        top: 72%;
+        right: 7%;
+        left: auto;
+        text-align: right;
     }
 
     .hyperspace-note--d {
-        top: 67%;
-        left: 10%;
+        top: 84%;
+        right: auto;
+        left: 7%;
+        text-align: left;
     }
 
     .contact {
@@ -1952,7 +1910,7 @@ button:focus-visible {
     }
 
     .head-top {
-        padding: 8px 0;
+        padding: 8px var(--pad);
         display: flex;
     }
 
@@ -1963,15 +1921,11 @@ button:focus-visible {
     }
 
     .wordmark {
-        padding: 9px 10px 9px 20px;
+        padding: 9px 10px;
     }
 
     .wordmark > span:first-child {
         font-size: 20px;
-    }
-
-    .wordmark > span:last-child {
-        font-size: 9px;
     }
 
     .head-links {
@@ -2052,20 +2006,6 @@ button:focus-visible {
         color: var(--label-3);
     }
 
-    .hero-copy {
-        right: 16px;
-        bottom: calc(104px + env(safe-area-inset-bottom, 0px));
-        left: 16px;
-    }
-
-    .hero-title {
-        max-width: none;
-        font-size: 7.2svw;
-        font-variation-settings: "wdth" 120;
-        letter-spacing: -0.045em;
-        line-height: 1;
-    }
-
     .hero-scroll,
     .scrollbar {
         display: none;
@@ -2076,6 +2016,11 @@ button:focus-visible {
     .manifesto-copy {
         font-size: 20px;
         line-height: 1.28;
+    }
+
+    .manifesto-copy.is-long-copy {
+        font-size: 18px;
+        line-height: 1.35;
     }
 }
 

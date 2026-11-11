@@ -96,6 +96,30 @@
         nodes.forEach(showNode);
     }
 
+    function refreshLiveClock() {
+        const clock = document.querySelector('[data-clock]');
+        if (!clock) return;
+        const mobile = window.matchMedia('(max-width: 1023px)').matches;
+        try {
+            const formatter = new Intl.DateTimeFormat('zh-CN', {
+                timeZone: 'Asia/Shanghai',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            clock.textContent = (mobile ? '' : '中国时间 ') + formatter.format(new Date());
+        } catch (error) {
+            clock.textContent = (mobile ? '' : '中国时间 ') +
+                new Date().toLocaleTimeString('zh-CN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+        }
+    }
+
     function getTextRect(element) {
         if (!element) return null;
         const range = document.createRange();
@@ -479,27 +503,15 @@
         return scene;
     }
 
-    createScene(hero, Array.from(document.querySelectorAll('#hero-title > span')).map((element, index) => ({
-        kind: 'text',
-        element,
-        textElement: element,
-        label: index === 0 ? 'EAST' : index === 1 ? 'UI' : 'MOTION',
-        move: compact ? 460 : 600,
-        frameDuration: 0,
-        typeMove: 120,
-        hold: 280,
-        exitDuration: compact ? 480 : 620
-    })));
-
     const wordmark = document.querySelector('.wordmark');
-    const siteMenu = document.querySelector('#site-menu');
     const menuToggle = document.querySelector('.head-menu-toggle');
     const headTime = document.querySelector('.head-time');
     const headCoords = document.querySelector('.head-coords');
     const headSum = document.querySelector('.head-sum');
+    const menuItems = Array.from(document.querySelectorAll('#site-menu > *'));
     createScene(document.body, [
         wordmark,
-        siteMenu,
+        ...menuItems,
         menuToggle,
         headTime,
         headCoords,
@@ -510,12 +522,13 @@
         textElement: element,
         label: '',
         badge: false,
+        onDraw: element === headTime ? refreshLiveClock : null,
         move: 360,
         frameDuration: 0,
         typeMove: 80,
         hold: 120,
         exitDuration: 380
-    })), { delay: compact ? 520 : 720, stagger: compact ? 210 : 260 });
+    })), { delay: compact ? 420 : 560, stagger: compact ? 170 : 200 });
 
     const manifestoPortrait = manifesto.querySelector('.manifesto-portrait-frame');
     const manifestoParagraphs = Array.from(manifesto.querySelectorAll('.manifesto-copy p'));
@@ -629,6 +642,9 @@
 
     function startVisibleActions(scene, now) {
         if (!started) return;
+        scene.actions.forEach((action) => {
+            if (action.finished && action.onDraw) action.onDraw();
+        });
         if (!scene.visibleAt) scene.visibleAt = now;
         const threshold = scene.section === folio ? 0.08 : 0.14;
         if (!sectionVisible(scene.section, threshold)) return;
@@ -654,6 +670,7 @@
 
     function finishAction(action) {
         if (action.finished) return;
+        if (action.onDraw) action.onDraw();
         action.finished = true;
         showNode(action.element);
         if (action.textElement) showNode(action.textElement);

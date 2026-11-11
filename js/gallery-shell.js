@@ -71,15 +71,6 @@
             window.addEventListener("resize", render, { passive: true });
         }
 
-        function decorateLogo() {
-            var logo = document.querySelector("header .logo");
-            if (logo && !logo.querySelector("span") && /^\s*East\s+wen\s*$/i.test(logo.textContent)) {
-                logo.innerHTML = "East wen<span>BLOG</span>";
-            }
-        }
-        decorateLogo();
-        window.addEventListener("load", decorateLogo);
-
         initGrid();
 
         var themeLink = document.querySelector('link[href*="style.css"]');

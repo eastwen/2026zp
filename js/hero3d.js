@@ -56,6 +56,7 @@ const stickerFiles = [
   's_05.png', 's_06.png', 's_07.png', 's_08.png',
   's_09.png', 's_10.png', 's_11.png', 's_12.png',
 ];
+const stickerCacheVersion = '20261111-1';
 
 const pointer = {
   uv: new THREE.Vector2(0.5, 0.5),
@@ -929,7 +930,7 @@ function loadStickers() {
   for (let index = 0; index < particleCount; index += 1) {
     const file = stickerFiles[index % stickerFiles.length];
     loader.load(
-      `./assets/reference/stickers/${file}`,
+      `./assets/reference/stickers/${file}?v=${stickerCacheVersion}`,
       (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace;
         const aspect = texture.image ? texture.image.width / texture.image.height : 1;

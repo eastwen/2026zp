@@ -165,6 +165,7 @@
             timeZone: 'Asia/Shanghai',
             hour: '2-digit',
             minute: '2-digit',
+            second: '2-digit',
             hour12: false
         });
         function update() {
@@ -175,7 +176,8 @@
         if (typeof mobileLayout.addEventListener === 'function') {
             mobileLayout.addEventListener('change', update);
         }
-        window.setInterval(update, 30000);
+        window.setInterval(update, 1000);
+        document.addEventListener('east-clock-refresh', update);
     }
 
     function initMenu() {
