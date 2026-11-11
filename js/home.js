@@ -391,6 +391,35 @@
         });
     }
 
+    function initContentProtection() {
+        document.addEventListener('contextmenu', function (event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('dragstart', function (event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('selectstart', function (event) {
+            if (event.target.tagName === 'IMG') event.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (event) {
+            const key = event.key.toLowerCase();
+            if (event.ctrlKey && key === 's') {
+                event.preventDefault();
+                return;
+            }
+            if (event.key === 'F12') {
+                event.preventDefault();
+                return;
+            }
+            if (event.ctrlKey && event.shiftKey && key === 'i') {
+                event.preventDefault();
+            }
+        });
+    }
+
     function initGrid() {
         const host = document.querySelector('[data-grid-overlay]');
         if (!host) return;
@@ -461,6 +490,7 @@
     initClock();
     initPointer();
     initMenu();
+    initContentProtection();
     initGrid();
     if (lenis) {
         initSpace(lenis);
