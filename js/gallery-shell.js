@@ -76,7 +76,9 @@
         var themeLink = document.querySelector('link[href*="style.css"]');
         if (themeLink) {
             var desired = getPrefix() + "css/gallery.css";
-            var existing = document.querySelector('link[data-gallery-css]');
+            var existing = document.querySelector(
+                'link[data-gallery-css], link[href*="css/gallery.css"]'
+            );
             if (!existing) {
                 var link = document.createElement("link");
                 link.rel = "stylesheet";

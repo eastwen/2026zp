@@ -4,7 +4,7 @@
 
 import * as THREE from '../vendor/three/three.module.js';
 import { GLTFLoader } from '../vendor/three/addons/loaders/GLTFLoader.js';
-import { FluidPass } from './fluid-pass.js';
+import { FluidPass } from './fluid-pass.js?v=2';
 import { LensFlarePass } from './lens-flare-pass.js';
 
 const CONFIG = {
@@ -51,12 +51,65 @@ const CONFIG = {
   },
 };
 
+const THEME_PALETTES = {
+  dark: {
+    glassBottom: [1.0, 0.61, 0.065],
+    glassTop: [0.88, 0.17, 0.105],
+    glassSpec: [1.0, 0.96, 0.9],
+    glassKeySpec: [1.0, 0.82, 0.54],
+    glassFresnel: [1.0, 0.91, 0.74],
+    arrowBase: 0xde2f28,
+    arrowSpec: [1.0, 0.93, 0.86],
+    arrowFixedSpec: [1.0, 0.82, 0.7],
+    arrowFixedSheen: [1.0, 0.6, 0.46],
+    arrowFresnel: [0.95, 0.66, 0.58],
+    hyperspaceAccent: 0xffd600,
+    stripeA: 0xffd600,
+    stripeB: 0xffb000,
+    flareTail: 0xffd000,
+    glassPointerTint: [1.0, 0.84, 0.08],
+    fluidTrail: [
+      [1.0, 0.84, 0.08],
+      [1.0, 0.74, 0.02],
+      [1.0, 0.9, 0.24]
+    ],
+    dotColor: 0x0f0e0b,
+  },
+  cool: {
+    glassBottom: [0.08, 0.58, 1.0],
+    glassTop: [0.16, 0.19, 0.92],
+    glassSpec: [0.9, 0.98, 1.0],
+    glassKeySpec: [0.58, 0.88, 1.0],
+    glassFresnel: [0.7, 0.88, 1.0],
+    arrowBase: 0x1a5fbf,
+    arrowSpec: [0.88, 0.97, 1.0],
+    arrowFixedSpec: [0.65, 0.91, 1.0],
+    arrowFixedSheen: [0.3, 0.72, 1.0],
+    arrowFresnel: [0.5, 0.78, 1.0],
+    hyperspaceAccent: 0x7ce6ff,
+    stripeA: 0x4bd7ff,
+    stripeB: 0x6d7bff,
+    flareTail: 0x55c8ff,
+    glassPointerTint: [0.34, 0.8, 1.0],
+    fluidTrail: [
+      [0.3, 0.86, 1.0],
+      [0.16, 0.62, 1.0],
+      [0.2, 0.38, 1.0]
+    ],
+    dotColor: 0x07131b,
+  },
+};
+
 const stickerFiles = [
   's_01.png', 's_02.png', 's_03.png', 's_04.png',
   's_05.png', 's_06.png', 's_07.png', 's_08.png',
   's_09.png', 's_10.png', 's_11.png', 's_12.png',
 ];
-const stickerCacheVersion = '20261111-1';
+const stickerFolders = {
+  dark: 'yellow',
+  cool: 'blue',
+};
+const stickerCacheVersion = '20261111-2';
 
 const pointer = {
   uv: new THREE.Vector2(0.5, 0.5),
@@ -132,7 +185,59 @@ const state = {
   running: false,
   readyShown: false,
   resizeObserver: null,
+  theme: 'dark',
 };
+
+function getDocumentTheme() {
+  return document.documentElement.classList.contains('cool') ? 'cool' : 'dark';
+}
+
+function applyTheme(theme = getDocumentTheme()) {
+  const name = theme === 'cool' ? 'cool' : 'dark';
+  const palette = THEME_PALETTES[name];
+  state.theme = name;
+  updateStickerTheme(name);
+
+  if (state.glassMaterial) {
+    const uniforms = state.glassMaterial.uniforms;
+    uniforms.uGradientBottom.value.fromArray(palette.glassBottom);
+    uniforms.uGradientTop.value.fromArray(palette.glassTop);
+    uniforms.uSpecHighlight.value.fromArray(palette.glassSpec);
+    uniforms.uKeySpecColor.value.fromArray(palette.glassKeySpec);
+    uniforms.uKeyFresnelColor.value.fromArray(palette.glassFresnel);
+    uniforms.uSpectralTint.value.fromArray(palette.glassPointerTint);
+  }
+
+  if (state.cursorMaterial) {
+    const uniforms = state.cursorMaterial.uniforms;
+    uniforms.uBaseColor.value.setHex(palette.arrowBase);
+    uniforms.uSpecColor.value.fromArray(palette.arrowSpec);
+    uniforms.uFixedSpecColor.value.fromArray(palette.arrowFixedSpec);
+    uniforms.uFixedSheenColor.value.fromArray(palette.arrowFixedSheen);
+    uniforms.uFresnelColor.value.fromArray(palette.arrowFresnel);
+  }
+
+  if (state.hyperspaceArrowMaterial) {
+    const uniforms = state.hyperspaceArrowMaterial.uniforms;
+    uniforms.uAccentColor.value.setHex(palette.hyperspaceAccent);
+    uniforms.uStripeColorA.value.setHex(palette.stripeA);
+    uniforms.uStripeColorB.value.setHex(palette.stripeB);
+  }
+
+  if (state.lensFlarePass) {
+    state.lensFlarePass.flareMaterial.uniforms.uTailColor.value.setHex(
+      palette.flareTail
+    );
+  }
+
+  if (state.fluidPass) {
+    state.fluidPass.setSpectrum(palette.fluidTrail);
+  }
+
+  if (state.dotOverlayMaterial) {
+    state.dotOverlayMaterial.uniforms.uColor.value.setHex(palette.dotColor);
+  }
+}
 
 const postVertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -200,6 +305,12 @@ const glassFragmentShader = /* glsl */ `
   uniform float uSaturation;
   uniform float uPointerEnergy;
   uniform float uTime;
+  uniform vec3 uGradientBottom;
+  uniform vec3 uGradientTop;
+  uniform vec3 uSpecHighlight;
+  uniform vec3 uKeySpecColor;
+  uniform vec3 uKeyFresnelColor;
+  uniform vec3 uSpectralTint;
   varying vec3 worldNormal;
   varying vec3 eyeVector;
   varying float modelLocalY;
@@ -256,10 +367,8 @@ const glassFragmentShader = /* glsl */ `
       0.0,
       1.0
     );
-    vec3 bottomColor = vec3(1.0, 0.61, 0.065);
-    vec3 topColor = vec3(0.88, 0.17, 0.105);
     float gradientMix = gradientY * gradientY * (3.0 - 2.0 * gradientY);
-    vec3 gradient = mix(bottomColor, topColor, gradientMix);
+    vec3 gradient = mix(uGradientBottom, uGradientTop, gradientMix);
 
     vec3 lightVector = normalize(-uLight);
     vec3 halfVector = normalize(eyeDir + lightVector);
@@ -278,21 +387,20 @@ const glassFragmentShader = /* glsl */ `
       screenUv * vec2(aspect, 1.0),
       uPointerScreen * vec2(aspect, 1.0)
     );
-    vec3 spectralShift = 0.5 + 0.5 * cos(
-      6.2831853 * (
-        vec3(0.0, 0.33, 0.67) +
-        pointerDistance * 2.2 +
-        normal.xyx * 0.12 -
-        uTime * 0.02
-      )
+    float spectralWave = 0.5 + 0.5 * cos(
+      pointerDistance * 13.823 +
+      normal.x * 1.2 +
+      normal.y * 0.8 -
+      uTime * 0.12
     );
+    vec3 spectralShift = uSpectralTint * mix(0.72, 1.08, spectralWave);
 
     vec3 color = gradient * (0.92 + kDiffuse * 0.1);
     color += refracted * gradient * 2.2;
-    vec3 specColor = mix(vec3(1.0, 0.96, 0.9), spectralShift, 0.28);
+    vec3 specColor = mix(uSpecHighlight, spectralShift, 0.28);
     color += kSpecular * specColor * 1.2 * specBoost;
-    color += keySpec * vec3(1.0, 0.82, 0.54) * 0.9;
-    color += fresnel * sideMask * vec3(1.0, 0.91, 0.74) * 1.3;
+    color += keySpec * uKeySpecColor * 0.9;
+    color += fresnel * sideMask * uKeyFresnelColor * 1.3;
     color *= 0.92 + keyDiffuse * 0.08;
     color *= 1.045;
     color = sat(color, 1.04);
@@ -326,6 +434,10 @@ const cursorFragmentShader = /* glsl */ `
   uniform float uSpecularStrength;
   uniform float uFresnelPower;
   uniform float uFresnelStrength;
+  uniform vec3 uSpecColor;
+  uniform vec3 uFixedSpecColor;
+  uniform vec3 uFixedSheenColor;
+  uniform vec3 uFresnelColor;
 
   varying vec3 worldNormal;
   varying vec3 eyeVector;
@@ -366,10 +478,10 @@ const cursorFragmentShader = /* glsl */ `
     float sideMask = smoothstep(-0.5, 0.5, dot(normal, normalize(uFresnelSideDir)));
 
     vec3 color = uBaseColor * (0.92 + fixedDiffuse * 0.2);
-    color += movingSpecular * uSpecularStrength * vec3(1.0, 0.93, 0.86);
-    color += fixedSpecular * vec3(1.0, 0.82, 0.7) * 1.12;
-    color += fixedSheen * vec3(1.0, 0.6, 0.46) * 0.16;
-    color += fresnelAmount * sideMask * uFresnelStrength * vec3(0.95, 0.66, 0.58);
+    color += movingSpecular * uSpecularStrength * uSpecColor;
+    color += fixedSpecular * uFixedSpecColor * 1.12;
+    color += fixedSheen * uFixedSheenColor * 0.16;
+    color += fresnelAmount * sideMask * uFresnelStrength * uFresnelColor;
 
     gl_FragColor = vec4(color, 1.0);
     #include <tonemapping_fragment>
@@ -780,6 +892,7 @@ function setupPost() {
   );
   state.fluidPass = new FluidPass(state.renderer);
   state.fluidPass.setSize(state.canvas.clientWidth, state.canvas.clientHeight);
+  applyTheme(state.theme);
 
   state.postScene = new THREE.Scene();
   state.postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -853,6 +966,12 @@ function createGlassMaterial(localYRange) {
       uSaturation: { value: 1.2 },
       uPointerEnergy: { value: 0.6 },
       uTime: { value: 0 },
+      uGradientBottom: { value: new THREE.Vector3(1.0, 0.61, 0.065) },
+      uGradientTop: { value: new THREE.Vector3(0.88, 0.17, 0.105) },
+      uSpecHighlight: { value: new THREE.Vector3(1.0, 0.96, 0.9) },
+      uKeySpecColor: { value: new THREE.Vector3(1.0, 0.82, 0.54) },
+      uKeyFresnelColor: { value: new THREE.Vector3(1.0, 0.91, 0.74) },
+      uSpectralTint: { value: new THREE.Vector3(1.0, 0.84, 0.08) },
     },
     side: THREE.FrontSide,
     toneMapped: false,
@@ -923,69 +1042,99 @@ function createLaneRatio(lane, laneCount) {
   return center + THREE.MathUtils.randFloatSpread(0.8 / Math.max(laneCount, 1));
 }
 
-function loadStickers() {
+function updateStickerTheme(theme = getDocumentTheme()) {
+  const name = theme === 'cool' ? 'cool' : 'dark';
+  state.floatingStickers.forEach((item) => {
+    const texture = item.textures?.[name];
+    if (!texture || item.mesh.material.map === texture) return;
+    item.mesh.material.map = texture;
+    item.mesh.material.needsUpdate = true;
+  });
+}
+
+function loadStickerTexture(loader, folder, file) {
+  return loader
+    .loadAsync(
+      `./assets/reference/stickers/${folder}/${file}?v=${stickerCacheVersion}`
+    )
+    .then((texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    });
+}
+
+async function loadStickers() {
   const loader = new THREE.TextureLoader();
   const isMobile = isMobileViewport();
   const particleCount = isMobile ? 9 : 14;
-  for (let index = 0; index < particleCount; index += 1) {
-    const file = stickerFiles[index % stickerFiles.length];
-    loader.load(
-      `./assets/reference/stickers/${file}?v=${stickerCacheVersion}`,
-      (texture) => {
-        texture.colorSpace = THREE.SRGBColorSpace;
-        const aspect = texture.image ? texture.image.width / texture.image.height : 1;
-        const material = new THREE.MeshBasicMaterial({
-          map: texture,
-          transparent: true,
-          depthWrite: false,
-          side: THREE.DoubleSide,
-        });
-        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
-        const worldHeight = viewportHeight();
-        const sizeFactor = 0.72 + Math.random() * 0.62;
-        const size = (isMobile ? worldHeight * 0.075 : 2.4) * sizeFactor;
-        const spawnWidthRatio = isMobile ? 1.12 : 1;
-        const depth = THREE.MathUtils.randFloat(-8, -3.5);
-        const viewport = stickerViewportAtZ(depth);
-        const spawnWidth = viewport.width * spawnWidthRatio;
-        const baseXLane = createLaneRatio(index, particleCount);
-        const baseX = baseXLane * spawnWidth;
-        const spawnY =
-          viewport.height * 0.5 +
-          0.6 +
-          Math.random() * viewport.height * 0.72;
-        mesh.scale.set(size * aspect, size, 1);
-        mesh.position.set(baseX, spawnY, depth);
-        mesh.rotation.z = THREE.MathUtils.randFloatSpread(Math.PI);
-        material.opacity = 0;
+  const stickerTextures = await Promise.allSettled(
+    Array.from({ length: particleCount }, (_, index) => {
+      const file = stickerFiles[index % stickerFiles.length];
+      return Promise.all([
+        loadStickerTexture(loader, stickerFolders.dark, file),
+        loadStickerTexture(loader, stickerFolders.cool, file),
+      ]);
+    })
+  );
 
-        const speed =
-          (isMobile ? worldHeight * 0.07 : 1) *
-          THREE.MathUtils.randFloat(1.1, 2.5);
-        state.floatingStickers.push({
-          mesh,
-          baseX,
-          baseXLane,
-          lane: index,
-          laneCount: particleCount,
-          spawnWidth,
-          spawnWidthRatio,
-          spawnHeight: worldHeight,
-          speed,
-          speedScreenRatio: speed / worldHeight,
-          sway: THREE.MathUtils.randFloat(0.45, 1.35),
-          swayPhase: Math.random() * Math.PI * 2,
-          spin: THREE.MathUtils.randFloat(-0.24, 0.24),
-          aspect,
-          sizeScreenRatio: size / worldHeight,
-        });
-        mesh.visible = state.stickersStarted;
-        state.scene.add(mesh);
-      },
-      undefined,
-      () => {}
-    );
-  }
+  stickerTextures.forEach((result, index) => {
+    if (result.status !== 'fulfilled') return;
+    const [yellowTexture, blueTexture] = result.value;
+    const textures = {
+      dark: yellowTexture,
+      cool: blueTexture,
+    };
+    const texture = textures[state.theme] || textures.dark;
+    const aspect = texture.image ? texture.image.width / texture.image.height : 1;
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+    const worldHeight = viewportHeight();
+    const sizeFactor = 0.72 + Math.random() * 0.62;
+    const size = (isMobile ? worldHeight * 0.075 : 2.4) * sizeFactor;
+    const spawnWidthRatio = isMobile ? 1.12 : 1;
+    const depth = THREE.MathUtils.randFloat(-8, -3.5);
+    const viewport = stickerViewportAtZ(depth);
+    const spawnWidth = viewport.width * spawnWidthRatio;
+    const baseXLane = createLaneRatio(index, particleCount);
+    const baseX = baseXLane * spawnWidth;
+    const spawnY =
+      viewport.height * 0.5 +
+      0.6 +
+      Math.random() * viewport.height * 0.72;
+    mesh.scale.set(size * aspect, size, 1);
+    mesh.position.set(baseX, spawnY, depth);
+    mesh.rotation.z = THREE.MathUtils.randFloatSpread(Math.PI);
+    material.opacity = 0;
+
+    const speed =
+      (isMobile ? worldHeight * 0.07 : 1) *
+      THREE.MathUtils.randFloat(1.1, 2.5);
+    state.floatingStickers.push({
+      mesh,
+      baseX,
+      baseXLane,
+      lane: index,
+      laneCount: particleCount,
+      spawnWidth,
+      spawnWidthRatio,
+      spawnHeight: worldHeight,
+      speed,
+      speedScreenRatio: speed / worldHeight,
+      sway: THREE.MathUtils.randFloat(0.45, 1.35),
+      swayPhase: Math.random() * Math.PI * 2,
+      spin: THREE.MathUtils.randFloat(-0.24, 0.24),
+      aspect,
+      sizeScreenRatio: size / worldHeight,
+      textures,
+    });
+    mesh.visible = state.stickersStarted;
+    state.scene.add(mesh);
+  });
 }
 
 function layoutFloatingStickers() {
@@ -1035,6 +1184,7 @@ function loadHello() {
     );
     state.hello.visible = !hasHeroLeftViewport();
     state.scene.add(state.hello);
+    applyTheme(state.theme);
   }, undefined, () => {});
 }
 
@@ -1052,6 +1202,10 @@ function createArrowMaterial(baseColor, side, fixedLightDir = new THREE.Vector3(
       uSpecularStrength: { value: 1.2 },
       uFresnelPower: { value: 6 },
       uFresnelStrength: { value: 1 },
+      uSpecColor: { value: new THREE.Vector3(1.0, 0.93, 0.86) },
+      uFixedSpecColor: { value: new THREE.Vector3(1.0, 0.82, 0.7) },
+      uFixedSheenColor: { value: new THREE.Vector3(1.0, 0.6, 0.46) },
+      uFresnelColor: { value: new THREE.Vector3(0.95, 0.66, 0.58) },
     },
     side,
   });
@@ -1122,6 +1276,7 @@ function loadCursor() {
     state.cursor.add(state.cursorTilt);
     state.cursor.visible = !hasHeroLeftViewport();
     state.scene.add(state.cursor);
+    applyTheme(state.theme);
     fitCursor();
 
     const hyperspaceTiltAngle = THREE.MathUtils.degToRad(
@@ -1205,6 +1360,9 @@ function setupHyperspaceOverlay() {
 
 function bindEvents() {
   window.addEventListener('pointermove', updatePointerFromEvent, { passive: true });
+  window.addEventListener('themechange', (event) => {
+    applyTheme(event.detail?.theme);
+  });
   window.addEventListener('pointerleave', () => {
     pointer.inside = false;
     pointer.targetUv.set(0.5, 0.5);
@@ -1824,6 +1982,7 @@ export function initHero3D(canvasEl) {
   if (!canvasEl || state.running) return;
 
   state.canvas = canvasEl;
+  state.theme = getDocumentTheme();
   state.clock = new THREE.Clock();
   setupRenderer(canvasEl);
   setupScene();

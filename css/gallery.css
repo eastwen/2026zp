@@ -21,6 +21,8 @@
     --g-text-3: rgba(var(--g-label-d), 0.34);
     --g-line: rgba(var(--g-label-d), 0.16);
     --g-accent: #f5a000;
+    --g-grid-stroke: rgba(255, 255, 255, 0.1);
+    --g-grid-tick: #ffffff;
     --g-pad: 56px;
     --g-head: 96px;
     --g-cubic: cubic-bezier(0.66, 0, 0.01, 1);
@@ -29,15 +31,18 @@
     color-scheme: dark;
 }
 
-html.light {
-    --g-label: 0, 0, 0;
-    --g-label-d: 54, 54, 48;
-    --g-bg: 251, 250, 244;
+html.cool {
+    --g-label: 235, 246, 255;
+    --g-label-d: 116, 205, 255;
+    --g-bg: 3, 3, 2;
     --g-text: rgba(var(--g-label), 1);
-    --g-text-2: rgba(var(--g-label-d), 0.6);
-    --g-text-3: rgba(var(--g-label-d), 0.32);
-    --g-line: rgba(var(--g-label-d), 0.1);
-    color-scheme: light;
+    --g-text-2: rgba(var(--g-label-d), 0.68);
+    --g-text-3: rgba(var(--g-label-d), 0.38);
+    --g-line: rgba(var(--g-label-d), 0.14);
+    --g-accent: #57cdff;
+    --g-grid-stroke: rgba(87, 205, 255, 0.17);
+    --g-grid-tick: #7ddcff;
+    color-scheme: dark;
 }
 
 html {
@@ -71,12 +76,14 @@ body {
 }
 
 .grid-overlay path.grid-lines {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: var(--g-grid-stroke);
+    transition: stroke 320ms ease;
 }
 
 .grid-overlay path.grid-ticks {
-    stroke: #ffffff;
+    stroke: var(--g-grid-tick);
     opacity: 0.4;
+    transition: stroke 320ms ease;
 }
 
 body::after {
@@ -160,8 +167,8 @@ header .head-back img {
     transition: opacity 220ms ease;
 }
 
-html.light header .head-back img {
-    filter: none;
+html.cool header .head-back img {
+    filter: invert(1);
 }
 
 header .head-back:hover {

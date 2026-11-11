@@ -33,6 +33,19 @@
     --hero-bg: #2d2d2d;
 }
 
+[data-theme="cool"] {
+    --bg-color: #030302;
+    --text-color: #ebf6ff;
+    --text-secondary: #a7d8f2;
+    --text-light: #d7efff;
+    --border-color: rgba(116, 205, 255, 0.16);
+    --nav-bg: rgba(3, 3, 2, 0.74);
+    --card-bg: #09141c;
+    --shadow: rgba(0, 0, 0, 0.36);
+    --accent-color: #57cdff;
+    --hero-bg: #071019;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -437,7 +450,8 @@ nav {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
-[data-theme="dark"] .portfolio-item.featured {
+[data-theme="dark"] .portfolio-item.featured,
+[data-theme="cool"] .portfolio-item.featured {
     background: linear-gradient(135deg, #3a3a3a 0%, #4a4a4a 100%);
 }
 
@@ -449,7 +463,8 @@ nav {
     overflow: hidden;
 }
 
-[data-theme="dark"] .project-image {
+[data-theme="dark"] .project-image,
+[data-theme="cool"] .project-image {
     background: #3a3a3a;
 }
 
@@ -465,7 +480,8 @@ nav {
     font-weight: 500;
 }
 
-[data-theme="dark"] .image-placeholder {
+[data-theme="dark"] .image-placeholder,
+[data-theme="cool"] .image-placeholder {
     background: linear-gradient(135deg, #3a3a3a 0%, #4a4a4a 100%);
     color: #aaa;
 }
@@ -1000,4 +1016,8 @@ html {
 /* 暗色模式适配 - 只修改portfolio顶部分割线 */
 body.dark-theme .portfolio {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+html.cool body.dark-theme .portfolio {
+    border-top-color: rgba(116, 205, 255, 0.2);
 }

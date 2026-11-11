@@ -44,7 +44,7 @@
         '#F24E1E', '#A259FF', '#1ABCFE', '#0ACF83', '#FF7262', '#FFC700',
         '#9747FF', '#E8467C', '#14AE5C', '#0D99FF', '#FF8A00', '#00B5CE'
     ];
-    const selectionBlue = '#0D99FF';
+    let selectionColor = '#FFD600';
     const arrowPath = new Path2D(
         'M4.6 3.9 C4.2 3.1 4.9 2.4 5.7 2.8 L20.6 9.4 C21.5 9.8 21.4 11.1 20.4 11.3 ' +
         'L13.9 12.9 C13.4 13 13 13.4 12.9 13.9 L11.3 20.4 C11.1 21.4 9.8 21.5 9.4 20.6 Z'
@@ -69,6 +69,13 @@
 
     function getPalette() {
         return cursorColors;
+    }
+
+    function refreshSelectionColor() {
+        const value = getComputedStyle(document.documentElement)
+            .getPropertyValue('--selection')
+            .trim();
+        if (value) selectionColor = value;
     }
 
     function hideNode(node) {
@@ -233,6 +240,20 @@
         return glyphs;
     }
 
+    function refreshGlyphColors() {
+        scenes.forEach((scene) => {
+            scene.actions.forEach((action) => {
+                if (!action.textElement || !action.glyphs.length) return;
+                const originRect = action.element.getBoundingClientRect();
+                const glyphs = collectGlyphs(action.textElement, originRect);
+                const count = Math.min(action.glyphs.length, glyphs.length);
+                for (let index = 0; index < count; index += 1) {
+                    action.glyphs[index].color = glyphs[index].color;
+                }
+            });
+        });
+    }
+
     function drawGlyphs(glyphs, originRect, elapsed, alpha) {
         if (!glyphs.length || elapsed < 0 || alpha <= 0) {
             return {
@@ -383,7 +404,7 @@
             rect.top + rect.height + 8
         );
         roundedRect(context, x, y, boxWidth, boxHeight, 2);
-        context.fillStyle = selectionBlue;
+        context.fillStyle = selectionColor;
         context.fill();
         context.fillStyle = '#ffffff';
         context.textAlign = 'center';
@@ -399,7 +420,7 @@
 
         context.save();
         context.globalAlpha = alpha;
-        context.strokeStyle = selectionBlue;
+        context.strokeStyle = selectionColor;
         context.lineWidth = 1;
         context.strokeRect(rect.left, rect.top, rect.width, rect.height);
 
@@ -412,12 +433,12 @@
         corners.forEach(([x, y]) => {
             context.fillStyle = '#ffffff';
             context.fillRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
-            context.strokeStyle = selectionBlue;
+            context.strokeStyle = selectionColor;
             context.strokeRect(x - handleSize / 2, y - handleSize / 2, handleSize, handleSize);
         });
 
         if (settings.text) {
-            context.strokeStyle = selectionBlue;
+            context.strokeStyle = selectionColor;
             context.lineWidth = 1.5;
             context.beginPath();
             context.moveTo(rect.left, rect.top + rect.height - 1);
@@ -627,6 +648,7 @@
         pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         compact = viewportWidth < 700;
         lightTheme = document.documentElement.classList.contains('light');
+        refreshSelectionColor();
         canvas.width = Math.max(1, Math.round(viewportWidth * pixelRatio));
         canvas.height = Math.max(1, Math.round(viewportHeight * pixelRatio));
         context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
@@ -1433,6 +1455,11 @@
 
     window.addEventListener('resize', resize, { passive: true });
     window.addEventListener('orientationchange', resize, { passive: true });
+    window.addEventListener('themechange', () => {
+        refreshGlyphColors();
+        refreshSelectionColor();
+        lightTheme = document.documentElement.classList.contains('light');
+    });
     window.addEventListener('pagehide', restoreAllNodes);
     document.addEventListener('visibilitychange', () => {
         lastTime = performance.now();

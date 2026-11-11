@@ -145,9 +145,15 @@ const DISPLAY_FRAGMENT = /* glsl */ `
   uniform float uDisplacementStrength;
   uniform float uChromaticBoost;
   uniform float uEffectEnabled;
+  uniform vec3 uSpectrumA;
+  uniform vec3 uSpectrumB;
+  uniform vec3 uSpectrumC;
 
   vec3 spectrum(float x) {
-    return cos((x - vec3(0.0, 0.5, 1.0)) * vec3(0.6, 1.0, 0.5) * 3.14);
+    float t = clamp(x, 0.0, 1.0);
+    return t < 0.5
+      ? mix(uSpectrumA, uSpectrumB, t * 2.0)
+      : mix(uSpectrumB, uSpectrumC, (t - 0.5) * 2.0);
   }
 
   vec4 getFluidDisplayColor(vec2 uv) {
@@ -277,6 +283,9 @@ export class FluidPass {
       uSimSize: { value: new THREE.Vector2(this.simWidth, this.simHeight) },
       uDisplacementStrength: { value: Math.max(this.strength / 0.3, 0) },
       uChromaticBoost: { value: Math.max(this.chromaticStrength / 0.004, 0) },
+      uSpectrumA: { value: new THREE.Color(0xffc247) },
+      uSpectrumB: { value: new THREE.Color(0xff5a24) },
+      uSpectrumC: { value: new THREE.Color(0xf02f55) },
       uEffectEnabled: { value: 1 },
     });
   }
@@ -355,6 +364,13 @@ export class FluidPass {
   setEffectEnabled(enabled) {
     this.enabled = Boolean(enabled);
     this.displayMaterial.uniforms.uEffectEnabled.value = this.enabled ? 1 : 0;
+  }
+
+  setSpectrum(colors) {
+    if (!this.displayMaterial || !colors) return;
+    this.displayMaterial.uniforms.uSpectrumA.value.fromArray(colors[0]);
+    this.displayMaterial.uniforms.uSpectrumB.value.fromArray(colors[1]);
+    this.displayMaterial.uniforms.uSpectrumC.value.fromArray(colors[2]);
   }
 
   render(renderer, inputTexture, outputTarget = null) {

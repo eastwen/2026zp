@@ -41,26 +41,28 @@ class HeaderComponent {
 
     getSavedTheme() {
         try {
-            return localStorage.getItem('theme') || 'dark';
+            const saved = localStorage.getItem('theme');
+            return saved === 'cool' ? 'cool' : 'dark';
         } catch (error) {
-            return 'dark';
+            return document.documentElement.classList.contains('cool') ? 'cool' : 'dark';
         }
     }
 
     applyTheme(theme) {
+        const next = theme === 'cool' ? 'cool' : 'dark';
         const html = document.documentElement;
-        html.classList.toggle('light', theme === 'light');
-        html.classList.toggle('dark', theme === 'dark');
-        html.classList.toggle('dark-theme', theme === 'dark');
-        html.setAttribute('data-theme', theme);
-        document.body.classList.toggle('dark-theme', theme === 'dark');
+        html.classList.toggle('cool', next === 'cool');
+        html.classList.toggle('dark', next === 'dark');
+        html.classList.add('dark-theme');
+        html.setAttribute('data-theme', next);
+        document.body.classList.add('dark-theme');
 
         const toggle = document.querySelector('[data-theme-toggle]');
-        if (toggle) toggle.textContent = theme === 'light' ? '主题[L]' : '主题[D]';
+        if (toggle) toggle.textContent = next === 'cool' ? '主题[C]' : '主题[D]';
     }
 
     handleThemeToggle() {
-        const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+        const next = document.documentElement.classList.contains('cool') ? 'dark' : 'cool';
         this.applyTheme(next);
         try {
             localStorage.setItem('theme', next);

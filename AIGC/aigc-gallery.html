@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="dark" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -7,8 +7,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>AIGC作品集 - East wen</title>
-    <link rel="stylesheet" href="../style.css?v=1.7">
-<link rel="stylesheet" href="../css/gallery.css?v=20">
+    <link rel="stylesheet" href="../style.css?v=1.8">
+<link rel="stylesheet" href="../css/gallery.css?v=22">
 <style>
 /* 确保AIGC页面内容可见 */
 #aigc-gallery {
@@ -303,18 +303,20 @@ body.dark-theme .back-btn:hover,
     <!-- 立即执行主题初始化，避免闪烁 -->
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark-theme');
-                document.body.classList.add('dark-theme');
-            }
+            let savedTheme = 'dark';
+            try {
+                savedTheme = localStorage.getItem('theme') === 'cool' ? 'cool' : 'dark';
+            } catch (error) {}
+            document.documentElement.classList.remove('light', 'dark', 'cool');
+            document.documentElement.classList.add(savedTheme, 'dark-theme');
+            document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
 
-<script src="../js/header-component.js?v=6"></script>
+<script src="../js/header-component.js?v=7"></script>
     <script src="../js/footer-component.js?v=3"></script>
     <script src="../js/subpage-lazyload.js"></script>
-    <script src="../js/gallery-shell.js?v=5"></script>
+    <script src="../js/gallery-shell.js?v=6"></script>
 </head>
 <body>
     <!-- Header将通过组件动态插入 -->

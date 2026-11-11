@@ -55,6 +55,7 @@
 
         let value = 8;
         let done = false;
+        let timer = 0;
         const started = performance.now();
 
         function set(next) {
@@ -66,7 +67,7 @@
         function finish() {
             if (done) return;
             done = true;
-            clearInterval(timer);
+            if (timer) clearInterval(timer);
             set(100);
             boot.classList.add('is-complete');
             window.setTimeout(function () { boot.remove(); }, 520);
@@ -78,7 +79,7 @@
         }
 
         set(10);
-        const timer = window.setInterval(function () {
+        timer = window.setInterval(function () {
             if (done) return;
             const cap = document.readyState === 'complete' ? 96 : document.readyState === 'interactive' ? 82 : 68;
             set(value + (cap - value) * 0.12 + Math.random() * 1.4);
@@ -259,18 +260,27 @@
         try {
             theme = localStorage.getItem('theme') || 'dark';
         } catch (error) {
-            theme = 'dark';
+            theme = root.classList.contains('cool') ? 'cool' : 'dark';
+        }
+        theme = theme === 'cool' ? 'cool' : 'dark';
+        function notify(next) {
+            window.dispatchEvent(new CustomEvent('themechange', {
+                detail: { theme: next }
+            }));
         }
         function apply(next) {
-            root.classList.toggle('light', next === 'light');
+            root.classList.toggle('cool', next === 'cool');
             root.classList.toggle('dark', next === 'dark');
-            if (toggle) toggle.textContent = next === 'light' ? '主题[L]' : '主题[D]';
+            root.setAttribute('data-theme', next);
+            if (toggle) toggle.textContent = next === 'cool' ? '主题[C]' : '主题[D]';
         }
         apply(theme);
+        notify(theme);
         if (!toggle) return;
         toggle.addEventListener('click', function () {
-            const next = root.classList.contains('light') ? 'dark' : 'light';
+            const next = root.classList.contains('cool') ? 'dark' : 'cool';
             apply(next);
+            notify(next);
             try {
                 localStorage.setItem('theme', next);
             } catch (error) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN" class="dark" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,18 @@
     <meta name="description" content="温晓东，UI 设计师，10 年界面与动效设计经验。">
     <meta name="theme-color" content="#030302">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f0e0b'/%3E%3Crect x='5' y='6' width='3' height='20' fill='%23f5a000'/%3E%3Ctext x='11' y='23' font-family='monospace' font-size='17' fill='%23fff7dc'%3EE%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="css/home.css?v=95">
+    <link rel="stylesheet" href="css/home.css?v=109">
+    <script>
+        (function () {
+            var theme = 'dark';
+            try {
+                theme = localStorage.getItem('theme') === 'cool' ? 'cool' : 'dark';
+            } catch (error) {}
+            document.documentElement.classList.remove('light', 'dark', 'cool');
+            document.documentElement.classList.add(theme);
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <script type="importmap">
         {
             "imports": {
@@ -62,7 +73,8 @@
                 <div class="grid-12 manifesto-grid">
                     <figure class="manifesto-portrait" aria-label="个人照片占位">
                         <div class="manifesto-portrait-frame">
-                            <img class="manifesto-portrait-image" src="assets/images/portrait.webp" alt="个人照片" loading="lazy" decoding="async">
+                            <img class="manifesto-portrait-image manifesto-portrait-image--warm" src="assets/images/portrait.webp" alt="个人照片" loading="lazy" decoding="async">
+                            <img class="manifesto-portrait-image manifesto-portrait-image--cool" src="assets/images/portrait-cool.webp" alt="个人照片" loading="lazy" decoding="async">
                         </div>
                     </figure>
                     <div class="manifesto-copy is-long-copy">
@@ -169,16 +181,16 @@
                         </a>
                     </div>
 
-                    <a class="folio-tile folio-cta" href="2026/2026-gallery.html">
+                    <div class="folio-tile folio-cta">
+                        <canvas class="folio-cta-canvas" data-glass-fold aria-hidden="true"></canvas>
                         <span class="folio-cta-inner">
                             <span class="folio-cta-top">
                                 <span class="folio-kicker">[ 02 ] ARCHIVE</span>
-                                <span class="folio-card-arrow" aria-hidden="true">↗</span>
                             </span>
                             <span class="folio-cta-title">查看全部作品</span>
                             <span class="folio-cta-sub">View the full portfolio</span>
                         </span>
-                    </a>
+                    </div>
                 </div>
             </section>
 
@@ -239,8 +251,9 @@
     <button class="scrollbar" type="button" data-scrollbar aria-label="拖动浏览页面"><span class="scrollbar-thumb" data-scrollbar-thumb></span></button>
 
     <script src="vendor/lenis.min.js"></script>
-    <script src="js/home.js?v=17"></script>
-    <script src="js/swarm-annotate.js?v=15"></script>
-    <script type="module" src="js/hero3d.js?v=236"></script>
+    <script src="js/glass-fold.js?v=7"></script>
+    <script src="js/home.js?v=19"></script>
+    <script src="js/swarm-annotate.js?v=17"></script>
+    <script type="module" src="js/hero3d.js?v=243"></script>
 </body>
 </html>

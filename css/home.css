@@ -21,9 +21,12 @@
     --label-3: rgba(var(--label-d), 0.34);
     --line: rgba(var(--label-d), 0.12);
     --grid-line: rgba(var(--label), 0.14);
+    --grid-stroke: rgba(255, 255, 255, 0.1);
+    --grid-tick: #ffffff;
     --elevated: #1b130c;
     --selection: #ffd600;
     --accent: #f5a000;
+    --ring: #ffd600;
     --cubic-66: cubic-bezier(0.66, 0, 0.01, 1);
     --font-sans: "TikTok Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
     --font-mono: "Geist Mono", "PingFang SC", monospace;
@@ -31,17 +34,21 @@
     color-scheme: dark;
 }
 
-html.light {
-    --label: 0, 0, 0;
-    --label-d: 54, 54, 48;
-    --bg-deep: 251, 250, 244;
-    --label-2: rgba(var(--label-d), 0.6);
-    --label-3: rgba(var(--label-d), 0.32);
-    --line: rgba(var(--label-d), 0.1);
-    --grid-line: rgba(var(--label-d), 0.08);
-    --elevated: #efede7;
-    --selection: #ffd600;
-    color-scheme: light;
+html.cool {
+    --label: 235, 246, 255;
+    --label-d: 116, 205, 255;
+    --bg-deep: 3, 3, 2;
+    --label-2: rgba(var(--label-d), 0.68);
+    --label-3: rgba(var(--label-d), 0.38);
+    --line: rgba(var(--label-d), 0.14);
+    --grid-line: rgba(var(--label), 0.16);
+    --grid-stroke: rgba(87, 205, 255, 0.17);
+    --grid-tick: #7ddcff;
+    --elevated: #09141c;
+    --selection: #7ddcff;
+    --accent: #57cdff;
+    --ring: #57cdff;
+    color-scheme: dark;
 }
 
 *,
@@ -65,7 +72,7 @@ body {
     font-size: 16px;
     line-height: 1.5;
     overflow: hidden;
-    transition: background-color 300ms ease-out, color 300ms ease-out;
+    transition: color 300ms ease-out;
 }
 
 .grid-overlay {
@@ -83,12 +90,14 @@ body {
 }
 
 .grid-overlay path.grid-lines {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: var(--grid-stroke);
+    transition: stroke 320ms ease;
 }
 
 .grid-overlay path.grid-ticks {
-    stroke: #ffffff;
+    stroke: var(--grid-tick);
     opacity: 0.4;
+    transition: stroke 320ms ease;
 }
 
 a {
@@ -143,6 +152,38 @@ button:focus-visible {
     background-size: calc((100vw - var(--pad) * 2) / 3) 33.333vh;
     background-position: var(--pad) 0;
     mask-image: radial-gradient(circle at 50% 55%, #000 0, transparent 72%);
+}
+
+html.cool #boot {
+    color: #eaf8ff;
+}
+
+html.cool #boot::before {
+    background-image:
+        linear-gradient(rgba(80, 199, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(80, 199, 255, 0.1) 1px, transparent 1px);
+}
+
+html.cool .boot-meta {
+    color: rgba(234, 248, 255, 0.72);
+}
+
+html.cool .boot-brand {
+    color: #f2fbff;
+}
+
+html.cool .boot-track {
+    background: rgba(234, 248, 255, 0.13);
+    box-shadow: 0 0 0 1px rgba(87, 205, 255, 0.2);
+}
+
+html.cool .boot-bar {
+    background: linear-gradient(90deg, #4dc9ff, #77e6ff 52%, #d7f8ff);
+    box-shadow: 0 0 22px rgba(87, 205, 255, 0.48);
+}
+
+html.cool .boot-status {
+    color: rgba(234, 248, 255, 0.52);
 }
 
 #boot.is-complete {
@@ -619,6 +660,12 @@ button:focus-visible {
     line-height: 1;
 }
 
+html.cool .hero-fallback {
+    background: linear-gradient(180deg, #7189ff 0%, #36b9ff 52%, #8ee8ff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
 .hero-scroll {
     display: none;
 }
@@ -663,6 +710,19 @@ button:focus-visible {
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: opacity 320ms ease;
+}
+
+.manifesto-portrait-image--cool {
+    opacity: 0;
+}
+
+html.cool .manifesto-portrait-image--warm {
+    opacity: 0;
+}
+
+html.cool .manifesto-portrait-image--cool {
+    opacity: 1;
 }
 
 .manifesto-copy {
@@ -1012,6 +1072,10 @@ button:focus-visible {
     padding: 96px var(--pad) 32px;
 }
 
+.page-content > section.folio {
+    z-index: 31;
+}
+
 .folio-head {
     display: flex;
     align-items: baseline;
@@ -1065,9 +1129,17 @@ button:focus-visible {
     grid-row: 1;
     justify-content: flex-start;
     background:
-        radial-gradient(95% 125% at 82% 8%, rgba(64, 116, 188, 0.4), transparent 58%),
-        radial-gradient(80% 100% at 72% 62%, rgba(118, 88, 210, 0.22), transparent 62%),
-        radial-gradient(120% 110% at 8% 100%, rgba(255, 166, 47, 0.1), transparent 56%),
+        radial-gradient(95% 125% at 82% 8%, rgba(255, 150, 24, 0.34), transparent 58%),
+        radial-gradient(80% 100% at 72% 62%, rgba(235, 72, 28, 0.2), transparent 62%),
+        radial-gradient(120% 110% at 8% 100%, rgba(255, 214, 120, 0.1), transparent 56%),
+        rgba(var(--label), 0.012);
+}
+
+html.cool .folio-intro {
+    background:
+        radial-gradient(95% 125% at 82% 8%, rgba(31, 169, 255, 0.34), transparent 58%),
+        radial-gradient(80% 100% at 72% 62%, rgba(99, 96, 255, 0.22), transparent 62%),
+        radial-gradient(120% 110% at 8% 100%, rgba(104, 226, 255, 0.11), transparent 56%),
         rgba(var(--label), 0.012);
 }
 
@@ -1164,7 +1236,7 @@ button:focus-visible {
 
 .folio-card:hover {
     background: rgba(var(--label), 0.055);
-    box-shadow: inset 0 0 0 1px rgba(245, 160, 0, 0.5);
+    box-shadow: inset 0 0 0 1px rgba(var(--label-d), 0.5);
 }
 
 .folio-card::before {
@@ -1296,7 +1368,27 @@ button:focus-visible {
     grid-row: 2;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--label-d), 0.035);
+    background:
+        radial-gradient(circle at 30% 28%, rgba(255, 28, 0, 0.24), transparent 54%),
+        radial-gradient(circle at 72% 72%, rgba(243, 134, 14, 0.18), transparent 58%),
+        #030302;
+}
+
+html.cool .folio-cta {
+    background:
+        radial-gradient(circle at 30% 28%, rgba(31, 169, 255, 0.28), transparent 54%),
+        radial-gradient(circle at 72% 72%, rgba(99, 96, 255, 0.22), transparent 58%),
+        #020507;
+}
+
+.folio-cta-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
 .folio-cta::before {
@@ -1316,10 +1408,6 @@ button:focus-visible {
     opacity: 0.75;
 }
 
-.folio-cta:hover {
-    background: rgba(var(--label-d), 0.06);
-}
-
 .folio-cta-inner {
     position: relative;
     z-index: 2;
@@ -1329,6 +1417,13 @@ button:focus-visible {
     width: min(76%, 460px);
     padding: 26px 28px;
     border: 1px solid rgba(var(--label-d), 0.2);
+    background: rgba(3, 3, 2, 0.24);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+html.cool .folio-cta-inner {
+    background: rgba(2, 8, 12, 0.28);
 }
 
 .folio-cta-top {
@@ -1346,23 +1441,12 @@ button:focus-visible {
     transition: color 300ms ease;
 }
 
-.folio-cta:hover .folio-cta-title {
-    color: var(--accent);
-}
-
 .folio-cta-sub {
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--label-3);
-}
-
-.folio-cta .folio-card-arrow {
-    position: static;
-    opacity: 1;
-    transform: none;
-    font-size: clamp(24px, 2.4vw, 36px);
 }
 
 .hyperspace {
@@ -1398,7 +1482,7 @@ button:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 0.06em;
-    color: #fff8e7;
+    color: var(--label-1);
     font-size: clamp(58px, 6.8vw, 132px);
     font-weight: 800;
     line-height: 0.9;
@@ -1450,10 +1534,15 @@ button:focus-visible {
     shape-rendering: geometricPrecision;
 }
 
+.hyperspace-ring-art [data-hs-ring] {
+    stroke: var(--ring);
+    transition: stroke 320ms ease;
+}
+
 .hyperspace-note {
     position: absolute;
     padding: 8px;
-    color: #fff8e7;
+    color: var(--label-1);
     font-size: clamp(18px, 1.55vw, 30px);
     font-weight: 500;
     line-height: 1.08;
@@ -1975,7 +2064,7 @@ button:focus-visible {
         border: 0;
         border-left: 1px solid var(--line);
         background:
-            linear-gradient(180deg, rgba(255, 174, 0, 0.045), transparent 34%),
+            linear-gradient(180deg, rgba(var(--label-d), 0.045), transparent 34%),
             rgba(var(--bg-deep), 0.97);
         box-shadow: -28px 0 80px rgba(0, 0, 0, 0.55);
         overflow-y: auto;
