@@ -184,12 +184,14 @@
         const header = document.querySelector('.site-head');
         const toggle = document.querySelector('[data-menu-toggle]');
         const links = document.querySelector('.head-links');
+        const scrim = document.querySelector('[data-menu-scrim]');
         if (!header || !toggle || !links) return;
 
         function setOpen(open) {
             header.classList.toggle('is-menu-open', open);
             toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
             toggle.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+            if (scrim) scrim.setAttribute('aria-hidden', open ? 'false' : 'true');
         }
 
         toggle.addEventListener('click', function (event) {
@@ -200,6 +202,12 @@
         links.addEventListener('click', function (event) {
             if (event.target.closest('a, button')) setOpen(false);
         });
+
+        if (scrim) {
+            scrim.addEventListener('click', function () {
+                setOpen(false);
+            });
+        }
 
         document.addEventListener('click', function (event) {
             if (!header.classList.contains('is-menu-open')) return;
@@ -268,50 +276,6 @@
             } catch (error) {
                 return;
             }
-        });
-    }
-
-    function initSound() {
-        const toggle = document.querySelector('[data-sound-toggle]');
-        if (!toggle) return;
-        let context = null;
-        let oscillator = null;
-        let gain = null;
-
-        function stop() {
-            if (oscillator) {
-                try { oscillator.stop(); } catch (error) { return; }
-                oscillator = null;
-            }
-            if (gain) {
-                gain.disconnect();
-                gain = null;
-            }
-            toggle.setAttribute('aria-pressed', 'false');
-            toggle.setAttribute('aria-label', '播放声音');
-            toggle.textContent = '声音[I]';
-        }
-
-        toggle.addEventListener('click', function () {
-            if (oscillator) {
-                stop();
-                return;
-            }
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            context = context || new AudioContext();
-            context.resume();
-            oscillator = context.createOscillator();
-            gain = context.createGain();
-            oscillator.type = 'sine';
-            oscillator.frequency.value = 54;
-            gain.gain.value = 0.012;
-            oscillator.connect(gain);
-            gain.connect(context.destination);
-            oscillator.start();
-            toggle.setAttribute('aria-pressed', 'true');
-            toggle.setAttribute('aria-label', '声音播放中，点击暂停');
-            toggle.textContent = '声音[-]';
         });
     }
 
@@ -486,7 +450,6 @@
     initReveals();
     initClock();
     initPointer();
-    initSound();
     initMenu();
     initGrid();
     if (lenis) {

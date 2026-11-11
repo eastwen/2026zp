@@ -215,6 +215,10 @@ button:focus-visible {
     font-size: 16px;
 }
 
+.menu-scrim {
+    display: none;
+}
+
 .head-top,
 .head-bottom {
     display: flex;
@@ -369,8 +373,7 @@ button:focus-visible {
 }
 
 .head-links a:hover::before,
-.head-links button:hover::before,
-.head-links [aria-pressed="true"]::before {
+.head-links button:hover::before {
     border-color: var(--label-1);
 }
 
@@ -1910,6 +1913,8 @@ button:focus-visible {
     }
 
     .head-top {
+        position: relative;
+        z-index: 3;
         padding: 8px var(--pad);
         display: flex;
     }
@@ -1928,52 +1933,128 @@ button:focus-visible {
         font-size: 20px;
     }
 
-    .head-links {
+    .menu-scrim {
         position: fixed;
-        top: calc(env(safe-area-inset-top, 0px) + 62px);
-        right: 16px;
-        display: flex;
-        width: min(222px, calc(100vw - 32px));
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        padding: 8px;
-        border: 1px solid var(--line);
-        background: rgba(var(--bg-deep), 0.92);
-        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+        inset: 0;
+        z-index: 1;
+        display: block;
+        border: 0;
+        background: rgba(0, 0, 0, 0.54);
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transform: translateY(-8px);
-        backdrop-filter: blur(18px);
+        backdrop-filter: blur(5px);
         transition:
-            opacity 220ms ease,
-            visibility 220ms ease,
-            transform 420ms var(--cubic-66);
+            opacity 280ms ease,
+            visibility 280ms ease;
+    }
+
+    .site-head.is-menu-open .menu-scrim {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .head-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        width: min(86vw, 390px);
+        height: 100svh;
+        height: 100dvh;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: 0;
+        padding:
+            calc(env(safe-area-inset-top, 0px) + 84px)
+            28px
+            calc(env(safe-area-inset-bottom, 0px) + 32px);
+        border: 0;
+        border-left: 1px solid var(--line);
+        background:
+            linear-gradient(180deg, rgba(255, 174, 0, 0.045), transparent 34%),
+            rgba(var(--bg-deep), 0.97);
+        box-shadow: -28px 0 80px rgba(0, 0, 0, 0.55);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translate3d(100%, 0, 0);
+        backdrop-filter: blur(22px) saturate(120%);
+        transition:
+            opacity 260ms ease,
+            visibility 260ms ease,
+            transform 520ms var(--cubic-66);
     }
 
     .site-head.is-menu-open .head-links {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
     }
 
     .head-links a,
     .head-links button {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 76px;
         width: 100%;
-        padding: 11px 12px;
-        font-size: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(var(--label), 0.14);
+        background: transparent;
+        font-size: clamp(24px, 7vw, 36px);
+        font-weight: 700;
+        line-height: 1;
         text-align: right;
+        opacity: 0;
+        transform: translate3d(18px, 0, 0);
+        transition:
+            opacity 280ms ease,
+            transform 440ms var(--cubic-66),
+            color 200ms ease;
+    }
+
+    .head-links a::before,
+    .head-links button::before {
+        display: none;
+    }
+
+    .site-head.is-menu-open .head-links a,
+    .site-head.is-menu-open .head-links button {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .head-links > :nth-child(1) {
+        transition-delay: 70ms;
+    }
+
+    .head-links > :nth-child(2) {
+        transition-delay: 115ms;
+    }
+
+    .head-links > :nth-child(3) {
+        transition-delay: 160ms;
+    }
+
+    .head-links > :nth-child(4) {
+        transition-delay: 205ms;
     }
 
     .head-links a:first-child {
-        display: block;
+        display: flex;
     }
 
     .head-menu-toggle {
         display: flex;
+        position: relative;
+        z-index: 4;
     }
 
     .head-coords,

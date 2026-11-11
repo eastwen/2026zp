@@ -4,28 +4,31 @@ class HeaderComponent {
         this.isSubPage = options.isSubPage || false;
         this.basePath = this.isSubPage ? '../' : '';
         this.handleThemeToggle = this.handleThemeToggle.bind(this);
-        this.handleSoundToggle = this.handleSoundToggle.bind(this);
         this.handleMenuToggle = this.handleMenuToggle.bind(this);
-
-        this.audioContext = null;
-        this.oscillator = null;
-        this.gain = null;
     }
 
     generateHTML() {
-        const homeLink = this.isSubPage ? `${this.basePath}index.html` : '#home';
+        const homeLink = this.isSubPage ? `${this.basePath}index.html#top` : '#top';
         const portfolioLink = this.isSubPage ? `${this.basePath}index.html#work` : '#work';
         const contactLink = 'mailto:392084795@qq.com';
+        const backButton = this.isSubPage
+            ? `<a class="head-back" href="${portfolioLink}" aria-label="返回上一层" title="返回上一层">
+                    <img src="${this.basePath}icon/back.svg" alt="" width="18" height="18">
+                </a>`
+            : '';
 
         return `
             <header class="site-head" aria-label="站点导航">
                 <div class="head-top">
-                    <a class="wordmark" href="${homeLink}" aria-label="回到顶部"><span>East wen</span></a>
+                    <div class="head-brand">
+                        <a class="wordmark" href="${homeLink}" aria-label="回到顶部"><span>East wen</span></a>
+                        ${backButton}
+                    </div>
                     <div class="head-links" id="site-menu">
+                        <a href="${homeLink}">首页</a>
                         <a href="${portfolioLink}">作品</a>
                         <a href="${contactLink}">联系</a>
                         <button type="button" data-theme-toggle aria-label="切换主题">主题[D]</button>
-                        <button type="button" data-sound-toggle aria-pressed="false" aria-label="播放声音">声音[I]</button>
                     </div>
                     <button class="head-menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="打开菜单">
                         <span></span>
@@ -71,61 +74,6 @@ class HeaderComponent {
         if (!toggle) return;
         toggle.addEventListener('click', this.handleThemeToggle);
         this.applyTheme(this.getSavedTheme());
-    }
-
-    handleSoundToggle() {
-        const toggle = document.querySelector('[data-sound-toggle]');
-        if (!toggle) return;
-
-        if (this.oscillator) {
-            this.stopSound();
-            return;
-        }
-
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-
-        this.audioContext = this.audioContext || new AudioContext();
-        this.audioContext.resume();
-        this.oscillator = this.audioContext.createOscillator();
-        this.gain = this.audioContext.createGain();
-        this.oscillator.type = 'sine';
-        this.oscillator.frequency.value = 54;
-        this.gain.gain.value = 0.012;
-        this.oscillator.connect(this.gain);
-        this.gain.connect(this.audioContext.destination);
-        this.oscillator.start();
-
-        toggle.setAttribute('aria-pressed', 'true');
-        toggle.setAttribute('aria-label', '声音播放中，点击暂停');
-        toggle.textContent = '声音[-]';
-    }
-
-    stopSound() {
-        const toggle = document.querySelector('[data-sound-toggle]');
-        if (this.oscillator) {
-            try {
-                this.oscillator.stop();
-            } catch (error) {
-                this.oscillator = null;
-            }
-            this.oscillator = null;
-        }
-        if (this.gain) {
-            this.gain.disconnect();
-            this.gain = null;
-        }
-        if (toggle) {
-            toggle.setAttribute('aria-pressed', 'false');
-            toggle.setAttribute('aria-label', '播放声音');
-            toggle.textContent = '声音[I]';
-        }
-    }
-
-    initSoundToggle() {
-        const toggle = document.querySelector('[data-sound-toggle]');
-        if (!toggle) return;
-        toggle.addEventListener('click', this.handleSoundToggle);
     }
 
     setMenuOpen(open) {
@@ -179,17 +127,13 @@ class HeaderComponent {
 
         this.applyTheme(this.getSavedTheme());
         this.initThemeToggle();
-        this.initSoundToggle();
         this.initMenu();
     }
 
     destroy() {
-        this.stopSound();
         const themeToggle = document.querySelector('[data-theme-toggle]');
-        const soundToggle = document.querySelector('[data-sound-toggle]');
         const menuToggle = document.querySelector('[data-menu-toggle]');
         if (themeToggle) themeToggle.removeEventListener('click', this.handleThemeToggle);
-        if (soundToggle) soundToggle.removeEventListener('click', this.handleSoundToggle);
         if (menuToggle) menuToggle.removeEventListener('click', this.handleMenuToggle);
     }
 

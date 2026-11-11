@@ -7,7 +7,7 @@
     <meta name="description" content="温晓东，UI 设计师，10 年界面与动效设计经验。">
     <meta name="theme-color" content="#030302">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f0e0b'/%3E%3Crect x='5' y='6' width='3' height='20' fill='%23f5a000'/%3E%3Ctext x='11' y='23' font-family='monospace' font-size='17' fill='%23fff7dc'%3EE%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="css/home.css?v=92">
+    <link rel="stylesheet" href="css/home.css?v=95">
     <script type="importmap">
         {
             "imports": {
@@ -28,13 +28,14 @@
     </div>
 
     <header class="site-head" aria-label="站点导航">
+        <div class="menu-scrim" data-menu-scrim aria-hidden="true"></div>
         <div class="head-top">
             <a class="wordmark" href="#top" aria-label="回到顶部"><span>East wen</span></a>
             <div class="head-links" id="site-menu">
+                <a href="#top">首页</a>
                 <a href="#work">作品</a>
                 <a href="mailto:392084795@qq.com">联系</a>
                 <button type="button" data-theme-toggle aria-label="切换主题">主题[D]</button>
-                <button type="button" data-sound-toggle aria-pressed="false" aria-label="播放声音">声音[I]</button>
             </div>
             <button class="head-menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="打开菜单">
                 <span></span>
@@ -238,7 +239,7 @@
     <button class="scrollbar" type="button" data-scrollbar aria-label="拖动浏览页面"><span class="scrollbar-thumb" data-scrollbar-thumb></span></button>
 
     <script src="vendor/lenis.min.js"></script>
-    <script src="js/home.js?v=15"></script>
+    <script src="js/home.js?v=17"></script>
     <script src="js/swarm-annotate.js?v=15"></script>
     <script type="module" src="js/hero3d.js?v=236"></script>
 </body>

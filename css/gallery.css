@@ -132,6 +132,46 @@ header .head-top {
     padding: 9px var(--g-pad);
 }
 
+header .head-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+header .head-back {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    transition: background-color 220ms ease;
+}
+
+header .head-back img {
+    width: 18px;
+    height: 18px;
+    opacity: 0.94;
+    filter: invert(1);
+    transition: opacity 220ms ease;
+}
+
+html.light header .head-back img {
+    filter: none;
+}
+
+header .head-back:hover {
+    background: rgba(var(--g-label), 0.16);
+}
+
+header .head-back:hover img {
+    opacity: 1;
+}
+
 header .wordmark {
     display: inline-flex;
     align-items: flex-end;
@@ -474,6 +514,14 @@ footer .copyright-notice p:first-child {
 
     header .wordmark {
         padding: 9px 10px;
+    }
+
+    header .head-brand {
+        gap: 7px;
+    }
+
+    header .head-back {
+        display: none;
     }
 
     header .wordmark > span {
