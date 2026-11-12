@@ -309,7 +309,8 @@
 
 <script src="../js/header-component.js?v=7"></script>
     <script src="../js/footer-component.js?v=3"></script>
-    <script src="../js/subpage-lazyload.js"></script>
+    <script src="../js/gallery-asset-meta.js?v=2"></script>
+    <script src="../js/subpage-lazyload.js?v=2"></script>
     <script src="../js/gallery-shell.js?v=6"></script>
 </head>
 <body>
@@ -417,7 +418,7 @@
                     if (!targetImage) return;
 
                     modal.style.display = 'block';
-                    modalImage.src = targetImage.src;
+                    modalImage.src = targetImage.dataset.fullSrc || targetImage.src;
                     modalImage.alt = targetImage.alt;
                     currentZoom = 1;
                     updateZoom();

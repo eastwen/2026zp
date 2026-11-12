@@ -9,6 +9,12 @@
 /js/deform-test.js
 /js/*.broken.bak
 
+# Tool caches and OS metadata
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+
 # Reference material kept locally only
 /新建文件夹/
 

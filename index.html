@@ -7,7 +7,7 @@
     <meta name="description" content="温晓东，UI 设计师，10 年界面与动效设计经验。">
     <meta name="theme-color" content="#030302">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f0e0b'/%3E%3Crect x='5' y='6' width='3' height='20' fill='%23f5a000'/%3E%3Ctext x='11' y='23' font-family='monospace' font-size='17' fill='%23fff7dc'%3EE%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="css/home.css?v=109">
+    <link rel="stylesheet" href="css/home.css?v=110">
     <script>
         (function () {
             var theme = 'dark';
@@ -17,6 +17,19 @@
             document.documentElement.classList.remove('light', 'dark', 'cool');
             document.documentElement.classList.add(theme);
             document.documentElement.setAttribute('data-theme', theme);
+            var skipIntro = false;
+            try {
+                skipIntro =
+                    sessionStorage.getItem('eastBootSeen') === '1' ||
+                    sessionStorage.getItem('eastIntroSeen') === '1';
+                if (!skipIntro) {
+                    sessionStorage.setItem('eastBootSeen', '1');
+                    sessionStorage.setItem('eastIntroSeen', '1');
+                }
+            } catch (error) {}
+            if (skipIntro) {
+                document.documentElement.classList.add('boot-skip', 'intro-skip');
+            }
         })();
     </script>
     <script type="importmap">
@@ -252,8 +265,8 @@
 
     <script src="vendor/lenis.min.js"></script>
     <script src="js/glass-fold.js?v=7"></script>
-    <script src="js/home.js?v=20"></script>
-    <script src="js/swarm-annotate.js?v=17"></script>
+    <script src="js/home.js?v=22"></script>
+    <script src="js/swarm-annotate.js?v=18"></script>
     <script type="module" src="js/hero3d.js?v=243"></script>
 </body>
 </html>

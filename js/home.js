@@ -52,6 +52,10 @@
         const bar = document.querySelector('[data-boot-bar]');
         const pct = document.querySelector('[data-boot-pct]');
         if (!boot) return;
+        if (root.classList.contains('boot-skip')) {
+            boot.remove();
+            return;
+        }
 
         let value = 8;
         let done = false;
@@ -69,6 +73,10 @@
             done = true;
             if (timer) clearInterval(timer);
             set(100);
+            try {
+                sessionStorage.setItem('eastBootSeen', '1');
+                sessionStorage.setItem('eastIntroSeen', '1');
+            } catch (error) {}
             boot.classList.add('is-complete');
             window.setTimeout(function () { boot.remove(); }, 520);
         }

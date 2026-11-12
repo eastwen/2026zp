@@ -142,6 +142,10 @@ button:focus-visible {
     transition: opacity 420ms ease, visibility 420ms ease;
 }
 
+html.boot-skip #boot {
+    display: none;
+}
+
 #boot::before {
     content: "";
     position: absolute;

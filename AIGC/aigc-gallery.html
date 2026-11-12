@@ -315,7 +315,8 @@ body.dark-theme .back-btn:hover,
 
 <script src="../js/header-component.js?v=7"></script>
     <script src="../js/footer-component.js?v=3"></script>
-    <script src="../js/subpage-lazyload.js"></script>
+    <script src="../js/gallery-asset-meta.js?v=2"></script>
+    <script src="../js/subpage-lazyload.js?v=2"></script>
     <script src="../js/gallery-shell.js?v=6"></script>
 </head>
 <body>
@@ -350,10 +351,10 @@ body.dark-theme .back-btn:hover,
             <li class="portfolio-item aigc-item"><img src="微信图片_20250702101449.png" alt="AIGC作品" loading="lazy"></li>
             <li class="portfolio-item aigc-item"><img src="微信图片_20250702101743.png" alt="AIGC作品" loading="lazy"></li>
             <li class="portfolio-item aigc-item"><img src="微信图片_20250702101818.png" alt="AIGC作品" loading="lazy"></li>
-            <li class="portfolio-item aigc-item"><video controls src="WeChat_20250702100143.mp4"></video></li>
-            <li class="portfolio-item aigc-item"><video controls src="WeChat_20250702100239.mp4"></video></li>
-            <li class="portfolio-item aigc-item"><video controls src="WeChat_20250702100319.mp4"></video></li>
-            <li class="portfolio-item aigc-item"><video controls src="WeChat_20250702100331.mp4"></video></li>
+            <li class="portfolio-item aigc-item"><video controls preload="none" playsinline width="624" height="624" data-gallery-src="WeChat_20250702100143.mp4"></video></li>
+            <li class="portfolio-item aigc-item"><video controls preload="none" playsinline width="832" height="464" data-gallery-src="WeChat_20250702100239.mp4"></video></li>
+            <li class="portfolio-item aigc-item"><video controls preload="none" playsinline width="720" height="544" data-gallery-src="WeChat_20250702100319.mp4"></video></li>
+            <li class="portfolio-item aigc-item"><video controls preload="none" playsinline width="624" height="624" data-gallery-src="WeChat_20250702100331.mp4"></video></li>
         </ul>
         </div>
     </section>
@@ -433,7 +434,7 @@ body.dark-theme .back-btn:hover,
                     if (!targetImage) return;
 
                     modal.style.display = 'block';
-                    modalImage.src = targetImage.src;
+                    modalImage.src = targetImage.dataset.fullSrc || targetImage.src;
                     modalImage.alt = targetImage.alt;
                     currentZoom = 1;
                     updateZoom();

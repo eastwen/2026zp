@@ -3,6 +3,10 @@
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reducedMotion.matches) return;
+    if (
+        document.documentElement.classList.contains('boot-skip') ||
+        document.documentElement.classList.contains('intro-skip')
+    ) return;
 
     const hero = document.querySelector('.hero');
     const manifesto = document.querySelector('.manifesto');
