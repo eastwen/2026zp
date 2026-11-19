@@ -22,3 +22,5 @@ Thumbs.db
 *.png
 !assets/**/*.png
 !**/img/**/*.png
+!AIGC/*.png
+!dp/*.png

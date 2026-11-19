@@ -7,7 +7,7 @@ class FooterComponent {
 
     // 生成footer HTML
     generateHTML() {
-        const qrPath = this.isSubPage ? '../img/微信图片_20250703153039.png' : 'img/微信图片_20250703153039.png';
+        const qrPath = this.isSubPage ? '../img/qrcode.png' : 'img/qrcode.png';
         return `
             <footer id="contact" class="contact">
                 <div class="footer-content">

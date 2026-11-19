@@ -409,180 +409,180 @@ window.__GALLERY_ASSET_META__ = {
     }
   },
   "dp": {
-    "产业经济（绿）.png": {
+    "dp-01.png": {
       "type": "image",
-      "src": "optimized/full/产业经济（绿）.webp",
-      "thumb": "optimized/thumbs/产业经济（绿）.webp",
+      "src": "optimized/full/dp-01.webp",
+      "thumb": "optimized/thumbs/dp-01.webp",
       "width": 1920,
       "height": 1080
     },
-    "数字经济建设看板.jpg": {
+    "dp-02.jpg": {
       "type": "image",
-      "src": "optimized/full/数字经济建设看板.webp",
-      "thumb": "optimized/thumbs/数字经济建设看板.webp",
+      "src": "optimized/full/dp-02.webp",
+      "thumb": "optimized/thumbs/dp-02.webp",
       "width": 5760,
       "height": 1080
     },
-    "智慧市监.png": {
+    "dp-03.png": {
       "type": "image",
-      "src": "optimized/full/智慧市监.webp",
-      "thumb": "optimized/thumbs/智慧市监.webp",
+      "src": "optimized/full/dp-03.webp",
+      "thumb": "optimized/thumbs/dp-03.webp",
       "width": 5760,
       "height": 1080
     },
-    "智慧市监（绿）.png": {
+    "dp-04.png": {
       "type": "image",
-      "src": "optimized/full/智慧市监（绿）.webp",
-      "thumb": "optimized/thumbs/智慧市监（绿）.webp",
+      "src": "optimized/full/dp-04.webp",
+      "thumb": "optimized/thumbs/dp-04.webp",
       "width": 1920,
       "height": 1080
     },
-    "示例大屏3.png": {
+    "dp-05.png": {
       "type": "image",
-      "src": "optimized/full/示例大屏3.webp",
-      "thumb": "optimized/thumbs/示例大屏3.webp",
+      "src": "optimized/full/dp-05.webp",
+      "thumb": "optimized/thumbs/dp-05.webp",
       "width": 1920,
       "height": 1080
     },
-    "禺智管大屏数据.jpg": {
+    "dp-06.jpg": {
       "type": "image",
-      "src": "optimized/full/禺智管大屏数据.webp",
-      "thumb": "optimized/thumbs/禺智管大屏数据.webp",
+      "src": "optimized/full/dp-06.webp",
+      "thumb": "optimized/thumbs/dp-06.webp",
       "width": 5760,
       "height": 1080
     }
   },
   "ztlogo": {
-    "方案1.jpg": {
+    "ztlogo-01.jpg": {
       "type": "image",
-      "src": "optimized/full/方案1.webp",
-      "thumb": "optimized/thumbs/方案1.webp",
+      "src": "optimized/full/ztlogo-01.webp",
+      "thumb": "optimized/thumbs/ztlogo-01.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案1.2.jpg": {
+    "ztlogo-02.jpg": {
       "type": "image",
-      "src": "optimized/full/方案1.2.webp",
-      "thumb": "optimized/thumbs/方案1.2.webp",
+      "src": "optimized/full/ztlogo-02.webp",
+      "thumb": "optimized/thumbs/ztlogo-02.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.3.jpg": {
+    "ztlogo-03.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.3.webp",
-      "thumb": "optimized/thumbs/方案 1.3.webp",
+      "src": "optimized/full/ztlogo-03.webp",
+      "thumb": "optimized/thumbs/ztlogo-03.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.3-1.jpg": {
+    "ztlogo-04.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.3-1.webp",
-      "thumb": "optimized/thumbs/方案 1.3-1.webp",
+      "src": "optimized/full/ztlogo-04.webp",
+      "thumb": "optimized/thumbs/ztlogo-04.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.4.jpg": {
+    "ztlogo-05.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.4.webp",
-      "thumb": "optimized/thumbs/方案 1.4.webp",
+      "src": "optimized/full/ztlogo-05.webp",
+      "thumb": "optimized/thumbs/ztlogo-05.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.4-1.jpg": {
+    "ztlogo-06.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.4-1.webp",
-      "thumb": "optimized/thumbs/方案 1.4-1.webp",
+      "src": "optimized/full/ztlogo-06.webp",
+      "thumb": "optimized/thumbs/ztlogo-06.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.5.jpg": {
+    "ztlogo-07.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.5.webp",
-      "thumb": "optimized/thumbs/方案 1.5.webp",
+      "src": "optimized/full/ztlogo-07.webp",
+      "thumb": "optimized/thumbs/ztlogo-07.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.6.jpg": {
+    "ztlogo-08.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.6.webp",
-      "thumb": "optimized/thumbs/方案 1.6.webp",
+      "src": "optimized/full/ztlogo-08.webp",
+      "thumb": "optimized/thumbs/ztlogo-08.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.7.jpg": {
+    "ztlogo-09.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.7.webp",
-      "thumb": "optimized/thumbs/方案 1.7.webp",
+      "src": "optimized/full/ztlogo-09.webp",
+      "thumb": "optimized/thumbs/ztlogo-09.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.8.jpg": {
+    "ztlogo-10.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.8.webp",
-      "thumb": "optimized/thumbs/方案 1.8.webp",
+      "src": "optimized/full/ztlogo-10.webp",
+      "thumb": "optimized/thumbs/ztlogo-10.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.9.jpg": {
+    "ztlogo-11.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.9.webp",
-      "thumb": "optimized/thumbs/方案 1.9.webp",
+      "src": "optimized/full/ztlogo-11.webp",
+      "thumb": "optimized/thumbs/ztlogo-11.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.10.jpg": {
+    "ztlogo-12.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.10.webp",
-      "thumb": "optimized/thumbs/方案 1.10.webp",
+      "src": "optimized/full/ztlogo-12.webp",
+      "thumb": "optimized/thumbs/ztlogo-12.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.11.jpg": {
+    "ztlogo-13.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.11.webp",
-      "thumb": "optimized/thumbs/方案 1.11.webp",
+      "src": "optimized/full/ztlogo-13.webp",
+      "thumb": "optimized/thumbs/ztlogo-13.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.12.jpg": {
+    "ztlogo-14.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.12.webp",
-      "thumb": "optimized/thumbs/方案 1.12.webp",
+      "src": "optimized/full/ztlogo-14.webp",
+      "thumb": "optimized/thumbs/ztlogo-14.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.13.jpg": {
+    "ztlogo-15.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.13.webp",
-      "thumb": "optimized/thumbs/方案 1.13.webp",
+      "src": "optimized/full/ztlogo-15.webp",
+      "thumb": "optimized/thumbs/ztlogo-15.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.14.jpg": {
+    "ztlogo-16.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.14.webp",
-      "thumb": "optimized/thumbs/方案 1.14.webp",
+      "src": "optimized/full/ztlogo-16.webp",
+      "thumb": "optimized/thumbs/ztlogo-16.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.15.jpg": {
+    "ztlogo-17.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.15.webp",
-      "thumb": "optimized/thumbs/方案 1.15.webp",
+      "src": "optimized/full/ztlogo-17.webp",
+      "thumb": "optimized/thumbs/ztlogo-17.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.16.jpg": {
+    "ztlogo-18.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.16.webp",
-      "thumb": "optimized/thumbs/方案 1.16.webp",
+      "src": "optimized/full/ztlogo-18.webp",
+      "thumb": "optimized/thumbs/ztlogo-18.webp",
       "width": 1920,
       "height": 1080
     },
-    "方案 1.17.jpg": {
+    "ztlogo-19.jpg": {
       "type": "image",
-      "src": "optimized/full/方案 1.17.webp",
-      "thumb": "optimized/thumbs/方案 1.17.webp",
+      "src": "optimized/full/ztlogo-19.webp",
+      "thumb": "optimized/thumbs/ztlogo-19.webp",
       "width": 1920,
       "height": 1080
     }
@@ -1255,178 +1255,178 @@ window.__GALLERY_ASSET_META__ = {
     }
   },
   "AIGC": {
-    "微信图片_20250702100457.png": {
+    "aigc-01.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100457.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100457.webp",
+      "src": "optimized/full/aigc-01.webp",
+      "thumb": "optimized/thumbs/aigc-01.webp",
       "width": 1104,
       "height": 1472
     },
-    "微信图片_20250702100527.png": {
+    "aigc-02.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100527.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100527.webp",
+      "src": "optimized/full/aigc-02.webp",
+      "thumb": "optimized/thumbs/aigc-02.webp",
       "width": 1750,
       "height": 1314
     },
-    "微信图片_20250702100634.png": {
+    "aigc-03.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100634.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100634.webp",
+      "src": "optimized/full/aigc-03.webp",
+      "thumb": "optimized/thumbs/aigc-03.webp",
       "width": 2711,
       "height": 1859
     },
-    "微信图片_20250702100727.png": {
+    "aigc-04.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100727.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100727.webp",
+      "src": "optimized/full/aigc-04.webp",
+      "thumb": "optimized/thumbs/aigc-04.webp",
       "width": 2718,
       "height": 1825
     },
-    "微信图片_20250702100757.png": {
+    "aigc-05.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100757.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100757.webp",
+      "src": "optimized/full/aigc-05.webp",
+      "thumb": "optimized/thumbs/aigc-05.webp",
       "width": 2319,
       "height": 1833
     },
-    "微信图片_20250702100824.png": {
+    "aigc-06.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100824.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100824.webp",
+      "src": "optimized/full/aigc-06.webp",
+      "thumb": "optimized/thumbs/aigc-06.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702100842.png": {
+    "aigc-07.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100842.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100842.webp",
+      "src": "optimized/full/aigc-07.webp",
+      "thumb": "optimized/thumbs/aigc-07.webp",
       "width": 641,
       "height": 587
     },
-    "微信图片_20250702100904.png": {
+    "aigc-08.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100904.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100904.webp",
+      "src": "optimized/full/aigc-08.webp",
+      "thumb": "optimized/thumbs/aigc-08.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702100950.png": {
+    "aigc-09.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702100950.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702100950.webp",
+      "src": "optimized/full/aigc-09.webp",
+      "thumb": "optimized/thumbs/aigc-09.webp",
       "width": 2400,
       "height": 2400
     },
-    "微信图片_20250702101143.png": {
+    "aigc-10.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101143.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101143.webp",
+      "src": "optimized/full/aigc-10.webp",
+      "thumb": "optimized/thumbs/aigc-10.webp",
       "width": 1664,
       "height": 936
     },
-    "微信图片_20250702101147.png": {
+    "aigc-11.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101147.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101147.webp",
+      "src": "optimized/full/aigc-11.webp",
+      "thumb": "optimized/thumbs/aigc-11.webp",
       "width": 1664,
       "height": 936
     },
-    "微信图片_20250702101150.png": {
+    "aigc-12.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101150.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101150.webp",
+      "src": "optimized/full/aigc-12.webp",
+      "thumb": "optimized/thumbs/aigc-12.webp",
       "width": 1664,
       "height": 936
     },
-    "微信图片_20250702101155.png": {
+    "aigc-13.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101155.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101155.webp",
+      "src": "optimized/full/aigc-13.webp",
+      "thumb": "optimized/thumbs/aigc-13.webp",
       "width": 1664,
       "height": 936
     },
-    "微信图片_20250702101206.png": {
+    "aigc-14.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101206.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101206.webp",
+      "src": "optimized/full/aigc-14.webp",
+      "thumb": "optimized/thumbs/aigc-14.webp",
       "width": 1664,
       "height": 936
     },
-    "微信图片_20250702101215.png": {
+    "aigc-15.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101215.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101215.webp",
+      "src": "optimized/full/aigc-15.webp",
+      "thumb": "optimized/thumbs/aigc-15.webp",
       "width": 1152,
       "height": 864
     },
-    "微信图片_20250702101235.png": {
+    "aigc-16.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101235.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101235.webp",
+      "src": "optimized/full/aigc-16.webp",
+      "thumb": "optimized/thumbs/aigc-16.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702101251.png": {
+    "aigc-17.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101251.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101251.webp",
+      "src": "optimized/full/aigc-17.webp",
+      "thumb": "optimized/thumbs/aigc-17.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702101258.png": {
+    "aigc-18.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101258.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101258.webp",
+      "src": "optimized/full/aigc-18.webp",
+      "thumb": "optimized/thumbs/aigc-18.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702101304.png": {
+    "aigc-19.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101304.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101304.webp",
+      "src": "optimized/full/aigc-19.webp",
+      "thumb": "optimized/thumbs/aigc-19.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702101401.jpg": {
+    "aigc-20.jpg": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101401.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101401.webp",
+      "src": "optimized/full/aigc-20.webp",
+      "thumb": "optimized/thumbs/aigc-20.webp",
       "width": 1408,
       "height": 768
     },
-    "微信图片_20250702101405.jpg": {
+    "aigc-21.jpg": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101405.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101405.webp",
+      "src": "optimized/full/aigc-21.webp",
+      "thumb": "optimized/thumbs/aigc-21.webp",
       "width": 1024,
       "height": 1024
     },
-    "微信图片_20250702101443.png": {
+    "aigc-22.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101443.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101443.webp",
+      "src": "optimized/full/aigc-22.webp",
+      "thumb": "optimized/thumbs/aigc-22.webp",
       "width": 1408,
       "height": 768
     },
-    "微信图片_20250702101449.png": {
+    "aigc-23.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101449.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101449.webp",
+      "src": "optimized/full/aigc-23.webp",
+      "thumb": "optimized/thumbs/aigc-23.webp",
       "width": 1408,
       "height": 768
     },
-    "微信图片_20250702101743.png": {
+    "aigc-24.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101743.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101743.webp",
+      "src": "optimized/full/aigc-24.webp",
+      "thumb": "optimized/thumbs/aigc-24.webp",
       "width": 960,
       "height": 1280
     },
-    "微信图片_20250702101818.png": {
+    "aigc-25.png": {
       "type": "image",
-      "src": "optimized/full/微信图片_20250702101818.webp",
-      "thumb": "optimized/thumbs/微信图片_20250702101818.webp",
+      "src": "optimized/full/aigc-25.webp",
+      "thumb": "optimized/thumbs/aigc-25.webp",
       "width": 928,
       "height": 1232
     },
